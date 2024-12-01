@@ -56,7 +56,7 @@ const onSubmit = () => {
         <BaseButton
           type="submit"
           variant="primary"
-          class="mt-4 w-full"
+          class="mt-8 w-full"
           :label="formSubmitText"
           :disabled="loading"
         />

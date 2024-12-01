@@ -28,11 +28,11 @@ const handleSign = () => {
     form-submit-text="Log in"
     bottom-text="Don't have an account?"
     bottom-link="/auth/register"
-    bottom-link-text="create one"
+    bottom-link-text="Create one"
     @submit="handleSign"
   >
     <template #before-submit>
-      <p class="text-slate-600 dark:text-slate-400 font-parkinsans text-end mt-2 mb-3">
+      <p class="text-slate-600 dark:text-slate-400 font-parkinsans text-end mt-2">
         <RouterLink to="/auth/forgot-password" class="hover:opacity-50 text-primary-600"
           >Forgot password?</RouterLink
         >
