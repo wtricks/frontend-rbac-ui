@@ -86,7 +86,7 @@ const commonProps = {
 const variantClass = computed(() => {
   switch (props.variant) {
     case 'primary':
-      return 'border-blue-500 focus-within:ring-blue-500 dark:border-blue-400 dark:focus-within:ring-blue-400'
+      return 'border-primary-500 focus-within:ring-primary-500 dark:border-primary-400 dark:focus-within:ring-primary-400'
     case 'secondary':
       return 'border-gray-300 focus-within:ring-gray-400 dark:border-gray-600 dark:focus-within:ring-gray-500'
     case 'outline':

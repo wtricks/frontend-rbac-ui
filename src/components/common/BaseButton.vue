@@ -40,11 +40,11 @@ const emit = defineEmits<{
 const variantClass = computed(() => {
   switch (props.variant) {
     case 'primary':
-      return 'bg-blue-500 text-white hover:bg-blue-600 dark:bg-blue-400 dark:hover:bg-blue-500'
+      return 'bg-primary-500 text-white hover:bg-primary-600 dark:bg-primary-400 dark:hover:bg-primary-500'
     case 'secondary':
       return 'bg-gray-300 text-gray-800 hover:bg-gray-400 dark:bg-gray-700 dark:text-gray-200'
     case 'outline':
-      return 'border border-blue-500 text-blue-500 hover:bg-blue-50 dark:border-blue-400 dark:text-blue-400 dark:hover:bg-blue-900'
+      return 'border border-primary-500 text-primary-500 hover:bg-primary-50 dark:border-primary-400 dark:text-primary-400 dark:hover:bg-primary-900'
     default:
       return ''
   }
