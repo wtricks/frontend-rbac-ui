@@ -51,21 +51,9 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
+import type { InputProps } from './types'
 
-const props = defineProps<{
-  label?: string
-  id?: string
-  type?: string
-  modelValue?: string | number
-  placeholder?: string
-  iconLeft?: string | object
-  iconRight?: string | object
-  variant?: 'primary' | 'secondary' | 'outline'
-  size?: 'sm' | 'md' | 'lg'
-  fullWidth?: boolean
-  disabled?: boolean
-  helperText?: string
-}>()
+const props = defineProps<InputProps>()
 
 const emit = defineEmits<{
   (e: 'update:modelValue', value: string | number): void
@@ -77,6 +65,7 @@ const tag = computed(() => (isSelect.value || isTextarea.value ? 'div' : 'input'
 
 const commonProps = {
   id: props.id,
+  name: props.name,
   value: props.modelValue, // TODO: 'defineModel' can be used here
   placeholder: props.placeholder,
   disabled: props.disabled,

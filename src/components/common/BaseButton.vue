@@ -23,15 +23,9 @@
 
 <script setup lang="ts">
 import { computed, defineEmits } from 'vue'
+import type { ButtonProps } from './types'
 
-const props = defineProps<{
-  label?: string
-  icon?: string | object
-  variant?: 'primary' | 'secondary' | 'outline'
-  size?: 'sm' | 'md' | 'lg'
-  fullWidth?: boolean
-  disabled?: boolean
-}>()
+const props = defineProps<ButtonProps>()
 
 const emit = defineEmits<{
   (e: 'click', event: MouseEvent): void
