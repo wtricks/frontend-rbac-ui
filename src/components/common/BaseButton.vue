@@ -1,0 +1,71 @@
+<template>
+  <button
+    :class="[
+      'flex items-center justify-center gap-2 px-4 py-2 font-medium rounded focus:outline-none transition-all duration-300',
+      variantClass,
+      sizeClass,
+      fullWidth ? 'w-full' : 'inline-block',
+      disabled ? 'opacity-50 cursor-not-allowed' : 'hover:shadow-lg',
+    ]"
+    :disabled="disabled"
+    @click="handleClick"
+  >
+    <span v-if="icon && !label" class="text-lg">
+      <component :is="icon" />
+    </span>
+    <span v-if="label && !icon">{{ label }}</span>
+    <span v-if="icon && label" class="flex items-center gap-2">
+      <component :is="icon" />
+      {{ label }}
+    </span>
+  </button>
+</template>
+
+<script setup lang="ts">
+import { computed, defineEmits } from 'vue'
+
+const props = defineProps<{
+  label?: string
+  icon?: string | object
+  variant?: 'primary' | 'secondary' | 'outline'
+  size?: 'sm' | 'md' | 'lg'
+  fullWidth?: boolean
+  disabled?: boolean
+}>()
+
+const emit = defineEmits<{
+  (e: 'click', event: MouseEvent): void
+}>()
+
+const variantClass = computed(() => {
+  switch (props.variant) {
+    case 'primary':
+      return 'bg-blue-500 text-white hover:bg-blue-600 dark:bg-blue-400 dark:hover:bg-blue-500'
+    case 'secondary':
+      return 'bg-gray-300 text-gray-800 hover:bg-gray-400 dark:bg-gray-700 dark:text-gray-200'
+    case 'outline':
+      return 'border border-blue-500 text-blue-500 hover:bg-blue-50 dark:border-blue-400 dark:text-blue-400 dark:hover:bg-blue-900'
+    default:
+      return ''
+  }
+})
+
+const sizeClass = computed(() => {
+  switch (props.size) {
+    case 'sm':
+      return 'text-sm py-1 px-2'
+    case 'md':
+      return 'text-md py-2 px-4'
+    case 'lg':
+      return 'text-lg py-3 px-6'
+    default:
+      return ''
+  }
+})
+
+const handleClick = (event: MouseEvent) => {
+  if (!props.disabled) {
+    emit('click', event)
+  }
+}
+</script>
