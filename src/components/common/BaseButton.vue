@@ -39,6 +39,8 @@ const variantClass = computed(() => {
       return 'bg-gray-300 text-gray-800 hover:bg-gray-400 dark:bg-gray-700 dark:text-gray-200'
     case 'outline':
       return 'border border-primary-500 text-primary-500 hover:bg-primary-50 dark:border-primary-400 dark:text-primary-400 dark:hover:bg-primary-900'
+    case 'tertiary':
+      return 'bg-transparent text-gray-500 hover:bg-gray-50 dark:text-gray-400 dark:hover:bg-gray-900'
     default:
       return ''
   }

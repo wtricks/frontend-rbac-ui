@@ -23,7 +23,7 @@ export interface InputProps {
 export interface ButtonProps {
   label?: string
   icon?: string | object
-  variant?: 'primary' | 'secondary' | 'outline'
+  variant?: 'primary' | 'secondary' | 'outline' | 'tertiary'
   size?: 'sm' | 'md' | 'lg'
   fullWidth?: boolean
   disabled?: boolean

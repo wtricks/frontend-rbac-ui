@@ -1,1 +1,14 @@
-/** Fade-in & Fade-out */
+/** Vue Transitions */
+
+/** Slide fade down */
+.slide-fade-down-enter-active,
+.slide-fade-down-leave-active {
+  transition: all 0.25s ease-out;
+  transform-origin: bottom;
+}
+.slide-fade-down-enter-from,
+.slide-fade-down-leave-to {
+  transform: scaleY(0.9);
+  transform-origin: bottom;
+  opacity: 0;
+}
