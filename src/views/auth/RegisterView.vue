@@ -38,7 +38,7 @@ const handleSignup = () => {}
     form-submit-text="Create account"
     bottom-text="Already have an account?"
     bottom-link="/auth/login"
-    bottom-link-text="Log in"
+    bottom-link-text="Login"
     @submit="handleSignup"
   />
 </template>
