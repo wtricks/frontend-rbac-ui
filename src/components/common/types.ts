@@ -7,8 +7,8 @@ export interface InputProps {
   type?: string
   modelValue?: string | number
   placeholder?: string
-  iconLeft?: string | object
-  iconRight?: string | object
+  iconLeft?: string | object | (() => void)
+  iconRight?: string | object | (() => void)
   variant?: 'primary' | 'secondary' | 'outline'
   size?: 'sm' | 'md' | 'lg'
   fullWidth?: boolean
@@ -22,7 +22,7 @@ export interface InputProps {
  */
 export interface ButtonProps {
   label?: string
-  icon?: string | object
+  icon?: string | object | (() => void)
   variant?: 'primary' | 'secondary' | 'outline' | 'tertiary'
   size?: 'sm' | 'md' | 'lg'
   fullWidth?: boolean

@@ -34,7 +34,14 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue'
 import { useDebounceFn } from '@vueuse/core'
-import { BsGrid1x2, LuUsers, RaCross2 } from '@kalimahapps/vue-icons'
+import {
+  AnOutlinedLock,
+  AnOutlinedUser,
+  AnOutlinedUserAdd,
+  BsGrid1x2,
+  LuUsers,
+  RaCross2,
+} from '@kalimahapps/vue-icons'
 
 import SidebarMenuItem from './SidebarMenuItem.vue'
 import Logo from '@/assets/logo.png'
@@ -61,10 +68,17 @@ const menuItems = [
       {
         label: 'New User',
         path: '/dashboard/users/new',
+        icon: AnOutlinedUserAdd,
       },
       {
         label: 'View Users',
         path: '/dashboard/users',
+        icon: LuUsers,
+      },
+      {
+        label: 'Permissions',
+        path: '/dashboard/permissions',
+        icon: AnOutlinedLock,
       },
     ],
   },
