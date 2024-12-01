@@ -38,7 +38,11 @@
         :class="['flex-1 bg-transparent outline-none resize-none', inputClass]"
       />
 
-      <span v-if="iconRight" class="text-lg text-gray-500 dark:text-gray-400">
+      <span
+        v-if="iconRight"
+        class="text-lg text-gray-500 dark:text-gray-400 cursor-pointer hover:opacity-80"
+        @click="emit('right-icon-click')"
+      >
         <component :is="iconRight" />
       </span>
     </div>
@@ -57,6 +61,7 @@ const props = defineProps<InputProps>()
 
 const emit = defineEmits<{
   (e: 'update:modelValue', value: string | number): void
+  (e: 'right-icon-click'): void
 }>()
 
 const isSelect = computed(() => props.type === 'select')

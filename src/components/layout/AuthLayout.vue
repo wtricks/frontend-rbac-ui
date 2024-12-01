@@ -2,6 +2,7 @@
 import { reactive } from 'vue'
 
 import BaseButton from '@/components/common/BaseButton.vue'
+import SecureInput from '@/components/common/SecureInput.vue'
 import BaseInput from '@/components/common/BaseInput.vue'
 
 import type { InputProps } from '@/components/common/types'
@@ -44,13 +45,15 @@ const onSubmit = () => {
       </p>
 
       <form :action="formAction" method="post" @submit.prevent="onSubmit" class="mt-8">
-        <BaseInput
-          v-for="(field, key) in fields"
-          :key="key"
-          v-model="formData[key]"
-          v-bind="field"
-          class="mt-4"
-        />
+        <template v-for="(field, key) in fields" :key="key">
+          <BaseInput
+            v-if="field.type != 'password'"
+            v-model="formData[key]"
+            v-bind="field"
+            class="mt-4"
+          />
+          <SecureInput v-else v-model="formData[key]" v-bind="field" class="mt-4" />
+        </template>
 
         <slot name="before-submit"></slot>
         <BaseButton
