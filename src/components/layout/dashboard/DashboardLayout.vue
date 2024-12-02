@@ -76,7 +76,7 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue'
 import { BxLogOutCircle } from '@kalimahapps/vue-icons'
-import { onClickOutside } from '@vueuse/core'
+import { onClickOutside, useEventListener } from '@vueuse/core'
 import { useLocalStorage } from '@vueuse/core'
 import {
   AnOutlinedMenu,
@@ -98,6 +98,10 @@ const menuRef = ref<HTMLLIElement>()
 
 onClickOutside(menuRef, () => {
   showProfileMenu.value = false
+})
+
+useEventListener(window, 'resize', () => {
+  isCollapsed.value = window.innerWidth < 768
 })
 
 watch(isDark, () => {
