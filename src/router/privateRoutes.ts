@@ -10,6 +10,15 @@ const privateRoutes: RouteRecordRaw[] = [
       authRequired: true,
     },
   },
+  {
+    path: '/dashboard/activity',
+    name: 'activity',
+    component: () => import('@/views/dashboard/ActivityView.vue'),
+    meta: {
+      title: 'Activities | RBAC',
+      authRequired: true,
+    },
+  },
 ]
 
 export default privateRoutes

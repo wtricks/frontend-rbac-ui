@@ -10,12 +10,12 @@
           <th
             v-for="header in headers"
             :key="header.key"
-            class="py-2 px-4 font-medium cursor-pointer"
+            class="py-2 px-4 font-medium"
+            :class="{ 'cursor-pointer': header.sortable }"
             @click="header.sortable && onSortByClick(header.key)"
           >
             <div class="flex items-center gap-2">
               <span>{{ header.label }}</span>
-              <!-- Sort Icon -->
               <ClArrowDownSm
                 v-if="header.sortable"
                 class="w-4 h-4 transition-transform duration-200"

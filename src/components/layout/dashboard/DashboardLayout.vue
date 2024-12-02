@@ -26,7 +26,13 @@
             @click="isDark = !isDark"
           />
           <span class="text-sm text-gray-600 dark:text-gray-400 select-none block mx-2">|</span>
-          <BaseButton type="button" :icon="AkBell" variant="tertiary" class="!px-2 mr-2" />
+          <BaseButton
+            type="button"
+            :icon="AkBell"
+            variant="tertiary"
+            class="!px-2 mr-2"
+            @click="$router.push({ name: 'activity' })"
+          />
           <div class="relative">
             <BaseButton
               type="button"
@@ -47,7 +53,7 @@
                 class="absolute top-10 right-0 w-32 bg-white rounded shadow overflow-hidden bg-white dark:bg-gray-800"
               >
                 <li
-                  @click="$router.push('/profile')"
+                  @click="$router.push({ name: 'profile' })"
                   class="px-4 py-1.5 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-600 dark:text-gray-300 flex items-center gap-2"
                 >
                   <BxUser class="mr-2 size-5" />

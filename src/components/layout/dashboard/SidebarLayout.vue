@@ -14,7 +14,7 @@
         class="ml-2 text-xl font-bold text-gray-800 dark:text-gray-200"
         :class="{ 'md:hidden': debounceCollapsed }"
       >
-        RBAC Admin
+        Admin
       </span>
 
       <BaseButton
