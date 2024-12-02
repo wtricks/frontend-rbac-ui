@@ -1,38 +1,25 @@
 <template>
-  <div class="w-full overflow-x-auto">
-    <div class="flex flex-col md:flex-row justify-between items-center mb-4 gap-4">
-      <BaseInput
-        v-if="searchable"
-        v-model="searchQuery"
-        placeholder="Search..."
-        class="w-full max-w-sm"
-        name="search"
-        variant="secondary"
-      />
-      <slot name="options" />
-    </div>
+  <div class="bg-white rounded shadow p-6 dark:bg-gray-800 overflow-x-auto">
+    <h2 v-if="title" class="text-xl font-semibold mb-4 dark:text-white">
+      {{ title }}
+    </h2>
 
-    <table class="table-auto w-full text-left border-collapse">
+    <table class="w-full table-auto border-collapse">
       <thead>
-        <tr class="bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300">
+        <tr class="text-left text-gray-500 border-b dark:text-gray-400 dark:border-gray-700">
           <th
             v-for="header in headers"
             :key="header.key"
-            class="py-2 px-4 cursor-pointer"
-            @click="header.sortable ? sortData(header.key) : null"
+            class="py-2 px-4 font-medium cursor-pointer"
+            @click="header.sortable && onSortByClick(header.key)"
           >
             <div class="flex items-center gap-2">
               <span>{{ header.label }}</span>
-              <component
+              <!-- Sort Icon -->
+              <ClArrowDownSm
                 v-if="header.sortable"
-                :is="
-                  sortedColumn === header.key
-                    ? sortOrder === 'asc'
-                      ? BsChevronUp
-                      : BsChevronDown
-                    : BsDash
-                "
-                class="text-sm"
+                class="w-4 h-4 transition-transform duration-200"
+                :class="{ 'rotate-180': sortBy === header.key }"
               />
             </div>
           </th>
@@ -40,116 +27,74 @@
       </thead>
       <tbody>
         <tr
-          v-for="row in paginatedData"
-          :key="row.id || rowIndex(row)"
-          class="border-b dark:border-gray-700"
+          v-for="(item, index) in items"
+          :key="(item.id || index) as string"
+          class="border-b last:border-0 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-700"
         >
-          <td v-for="header in headers" :key="header.key" class="py-2 px-4">
-            <slot name="row" :item="row[header.key]">{{ row[header.key] }}</slot>
-          </td>
-        </tr>
-        <tr v-if="filteredData.length === 0">
-          <td :colspan="headers.length" class="text-center py-4 text-gray-500 dark:text-gray-400">
-            {{ emptyRowMessage || 'No data available.' }}
+          <td
+            v-for="header in headers"
+            :key="header.key"
+            class="py-2 px-4 text-gray-800 dark:text-gray-300"
+          >
+            <slot name="item" :item="item[header.key]" :header="header.key">
+              {{ item[header.key] }}
+            </slot>
           </td>
         </tr>
       </tbody>
     </table>
 
-    <div
-      v-if="paginatedData.length > 0 && paginated"
-      class="flex justify-end mt-4 items-center gap-4 mb-10"
-    >
+    <div v-if="paginated" class="mt-4 flex justify-end gap-2">
       <BaseButton
+        class="px-4 py-2"
         :disabled="currentPage === 1"
-        @click="currentPage--"
+        @click="onPageChange((currentPage as number) - 1)"
         variant="tertiary"
-        label="Previous"
-      />
-      <span class="text-gray-600 dark:text-gray-300">
+      >
+        Previous
+      </BaseButton>
+      <span class="px-4 py-2 text-gray-500 dark:text-gray-400">
         Page {{ currentPage }} of {{ totalPages }}
       </span>
       <BaseButton
+        class="px-4 py-2"
         :disabled="currentPage === totalPages"
-        @click="currentPage++"
+        @click="onPageChange((currentPage as number) + 1)"
         variant="tertiary"
-        label="Next"
-      />
+      >
+        Next
+      </BaseButton>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue'
-import { BsChevronUp, BsChevronDown, BsDash } from '@kalimahapps/vue-icons'
+import { ref } from 'vue'
+import { ClArrowDownSm } from '@kalimahapps/vue-icons'
+import BaseButton from '@/components/common/BaseButton.vue'
 
-import BaseButton from './BaseButton.vue'
-import BaseInput from './BaseInput.vue'
-
-interface Header {
-  label: string
-  key: string
-  sortable?: boolean
-}
-
-interface Props {
-  headers: Header[]
-  data: Record<string, string>[]
-  searchable?: boolean
+defineProps<{
+  headers: { label: string; key: string; sortable?: boolean }[]
+  items: Record<string, unknown>[]
+  title?: string
   paginated?: boolean
-  rowsPerPage?: number
-  emptyRowMessage?: string
+  totalPages?: number
+  currentPage?: number
+}>()
+
+const emit = defineEmits<{
+  (e: 'sort', key: string): void
+  (e: 'page-change', page: number): void
+}>()
+
+const sortBy = ref('')
+
+const onSortByClick = (key: string) => {
+  sortBy.value = key
+  emit('sort', key)
 }
 
-const props = defineProps<Props>()
-// const
-
-const searchQuery = ref('')
-const currentPage = ref(1)
-const sortedColumn = ref<string | null>(null)
-const sortOrder = ref<'asc' | 'desc'>('asc')
-
-const filteredData = computed(() => {
-  if (!props.searchable || !searchQuery.value.trim()) return props.data
-
-  const query = searchQuery.value.toLowerCase()
-  return props.data.filter((row) =>
-    Object.values(row).some((value) => String(value).toLowerCase().includes(query)),
-  )
-})
-
-const sortedData = computed(() => {
-  if (!sortedColumn.value) return filteredData.value
-
-  return [...filteredData.value].sort((a, b) => {
-    const aValue = a[sortedColumn.value!]
-    const bValue = b[sortedColumn.value!]
-
-    if (aValue === bValue) return 0
-    if (sortOrder.value === 'asc') return aValue > bValue ? 1 : -1
-    return aValue < bValue ? 1 : -1
-  })
-})
-
-const totalPages = computed(() => Math.ceil(sortedData.value.length / props.rowsPerPage!))
-
-const paginatedData = computed(() => {
-  if (!props.paginated) return sortedData.value
-
-  const start = (currentPage.value - 1) * props.rowsPerPage!
-  return sortedData.value.slice(start, start + props.rowsPerPage!)
-})
-
-const sortData = (columnKey: string) => {
-  if (sortedColumn.value === columnKey) {
-    sortOrder.value = sortOrder.value === 'asc' ? 'desc' : 'asc'
-  } else {
-    sortedColumn.value = columnKey
-    sortOrder.value = 'asc'
-  }
-}
-
-const rowIndex = (row: Record<string, string>) => {
-  return props.data.indexOf(row)
+const onPageChange = (page: number) => {
+  emit('page-change', page)
 }
 </script>

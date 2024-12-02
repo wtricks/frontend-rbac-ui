@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import DashboardLayout from '@/components/layout/dashboard/DashboardLayout.vue'
+import BaseTable from '@/components/common/BaseTable.vue'
 
 const stats = [
   { label: 'Users', value: 1250, icon: '👤' },
@@ -32,28 +33,14 @@ const activities = [
       </div>
     </div>
 
-    <div class="bg-white rounded shadow p-6 dark:bg-gray-800">
-      <h2 class="text-xl font-semibold mb-4 dark:text-white">Recent Activities</h2>
-      <table class="w-full table-auto">
-        <thead>
-          <tr class="text-left text-gray-500 border-b dark:text-gray-400 dark:border-gray-700">
-            <th class="py-2">User</th>
-            <th class="py-2">Action</th>
-            <th class="py-2">Time</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr
-            v-for="activity in activities"
-            :key="activity.user + activity.time"
-            class="border-b dark:border-gray-700 text-gray-800 dark:text-gray-500 last:border-0"
-          >
-            <td class="py-2">{{ activity.user }}</td>
-            <td class="py-2">{{ activity.action }}</td>
-            <td class="py-2 text-gray-500 dark:text-gray-400">{{ activity.time }}</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+    <BaseTable
+      :headers="[
+        { key: 'user', label: 'User' },
+        { key: 'action', label: 'Action' },
+        { key: 'time', label: 'Time' },
+      ]"
+      :items="activities"
+      title="Recent Activities"
+    />
   </DashboardLayout>
 </template>
