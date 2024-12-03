@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { BsX, BsChevronDown, BsChevronUp } from '@kalimahapps/vue-icons'
 
+import CheckBox from '@/components/common/CheckBox.vue';
+
 interface PermissionGroup {
   id: number
   title: string
@@ -32,7 +34,6 @@ const toggleAllChildren = (group: PermissionGroup, checked: boolean) => {
       :key="group.id"
       class="border rounded mb-4 overflow-hidden dark:border-gray-700"
     >
-      <!-- Group Header -->
       <div
         class="flex items-center justify-between p-4 bg-gray-100 dark:bg-gray-700 cursor-pointer"
         @click="toggleGroup(group)"
@@ -61,7 +62,6 @@ const toggleAllChildren = (group: PermissionGroup, checked: boolean) => {
         </div>
       </div>
 
-      <!-- Group Items -->
       <div v-if="group.expanded" class="p-4 bg-gray-50 dark:bg-gray-800">
         <div
           v-for="child in group.children"

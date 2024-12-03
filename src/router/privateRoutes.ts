@@ -19,6 +19,15 @@ const privateRoutes: RouteRecordRaw[] = [
       authRequired: true,
     },
   },
+  {
+    path: '/dashboard/users/permissions',
+    name: 'permissions',
+    component: () => import('@/views/dashboard/PermissionView.vue'),
+    meta: {
+      title: 'Permissions | RBAC',
+      authRequired: true,
+    },
+  }
 ]
 
 export default privateRoutes
