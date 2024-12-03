@@ -4,6 +4,12 @@ import { ref } from 'vue'
 import BaseTable from '@/components/common/BaseTable.vue'
 import DashboardLayout from '@/components/layout/dashboard/DashboardLayout.vue'
 
+const isLoading = ref(false)
+const pagination = ref({
+  total: 10,
+  currPage: 1,
+})
+
 const activities = ref([
   { user: 'John Doe', action: 'Created a new post', time: '2 hours ago' },
   { user: 'Jane Smith', action: 'Updated profile picture', time: '4 hours ago' },
@@ -22,6 +28,14 @@ const activities = ref([
   { user: 'David Lee', action: 'Commented on a post', time: '6 hours ago' },
   { user: 'Emma Brown', action: 'Joined the platform', time: '1 day ago' },
 ])
+
+const fetchData = async () => {
+  isLoading.value = true
+
+  setTimeout(() => {
+    isLoading.value = false
+  }, 1000);
+}
 </script>
 
 <template>
@@ -33,10 +47,12 @@ const activities = ref([
         { key: 'time', label: 'Time' },
       ]"
       :items="activities"
+      :per-page-limit="[10, 25, 50]"
+      searchable
       title="Recent Activities"
-      paginated
-      :total-pages="10"
-      :current-page="1"
+      :is-loading="isLoading"
+      :pagination="pagination"
+      @fetch="fetchData"
     />
   </DashboardLayout>
 </template>

@@ -1,41 +1,46 @@
 <template>
-  <div class="bg-white rounded shadow p-6 dark:bg-gray-800 overflow-x-auto">
-    <h2 v-if="title" class="text-xl font-semibold mb-4 dark:text-white">
-      {{ title }}
-    </h2>
+  <div class="bg-white rounded shadow p-6 dark:bg-gray-800 overflow-x-auto relative">
+    <div v-if="isLoading"
+      class="absolute inset-0 flex items-center justify-center bg-white bg-opacity-75 dark:bg-gray-800 z-10">
+      <div class="flex items-center gap-2">
+        <span class="rounded-full w-6 h-6 border-4 border-t-transparent border-gray-500 animate-spin"></span>
+        <span class="text-gray-600 dark:text-gray-400">Loading...</span>
+      </div>
+    </div>
+
+    <div class="grid items-center mb-4 grid-cols-1 md:grid-cols-2">
+      <h2 v-if="title" class="text-xl font-semibold dark:text-white">
+        {{ title }}
+      </h2>
+
+      <div v-if="searchable" class="flex items-center gap-4 ml-auto mt-2 md:mt-0 w-full md:w-auto">
+        <BaseInput v-model="searchQuery" type="search" placeholder="Search..." class="md:max-w-64" name="search"
+          variant="secondary" @input="onSearch" />
+        <BaseInput v-if="perPageLimit" v-model="perPage" type="select" name="perPage" variant="secondary" class="max-w-20">
+          <template #options>
+            <option v-for="limit in perPageLimit" :key="limit" :value="limit">{{ limit }}</option>
+          </template>
+        </BaseInput>
+      </div>
+    </div>
 
     <table class="w-full table-auto border-collapse">
       <thead>
         <tr class="text-left text-gray-500 border-b dark:text-gray-400 dark:border-gray-700">
-          <th
-            v-for="header in headers"
-            :key="header.key"
-            class="py-2 px-4 font-medium"
-            :class="{ 'cursor-pointer': header.sortable }"
-            @click="header.sortable && onSortByClick(header.key)"
-          >
+          <th v-for="header in headers" :key="header.key" class="py-2 px-4 font-medium cursor-pointer"
+            @click="header.sortable && onSort(header.key)">
             <div class="flex items-center gap-2">
               <span>{{ header.label }}</span>
-              <ClArrowDownSm
-                v-if="header.sortable"
-                class="w-4 h-4 transition-transform duration-200"
-                :class="{ 'rotate-180': sortBy === header.key }"
-              />
+              <ClArrowDownSm v-if="header.sortable" class="w-4 h-4 transition-transform duration-200"
+                :class="{ 'rotate-180': sortBy === header.key }" />
             </div>
           </th>
         </tr>
       </thead>
       <tbody>
-        <tr
-          v-for="(item, index) in items"
-          :key="(item.id || index) as string"
-          class="border-b last:border-0 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-700"
-        >
-          <td
-            v-for="header in headers"
-            :key="header.key"
-            class="py-2 px-4 text-gray-800 dark:text-gray-300"
-          >
+        <tr v-for="(item, index) in items" :key="item.id || index"
+          class="border-b last:border-0 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-700">
+          <td v-for="header in headers" :key="header.key" class="py-2 px-4 text-gray-800 dark:text-gray-300">
             <slot name="item" :item="item[header.key]" :header="header.key">
               {{ item[header.key] }}
             </slot>
@@ -44,57 +49,83 @@
       </tbody>
     </table>
 
-    <div v-if="paginated" class="mt-4 flex justify-end gap-2">
-      <BaseButton
-        class="px-4 py-2"
-        :disabled="currentPage === 1"
-        @click="onPageChange((currentPage as number) - 1)"
-        variant="tertiary"
-      >
-        Previous
-      </BaseButton>
+    <div v-if="pagination" class="mt-4 flex justify-end gap-2">
+      <BaseButton class="px-4 py-2" :disabled="pagination.currPage === 1" @click="changePage(pagination.currPage - 1)"
+        variant="tertiary" label="Previous" />
       <span class="px-4 py-2 text-gray-500 dark:text-gray-400">
-        Page {{ currentPage }} of {{ totalPages }}
+        Page {{ pagination.currPage }} of {{ pagination.total }}
       </span>
-      <BaseButton
-        class="px-4 py-2"
-        :disabled="currentPage === totalPages"
-        @click="onPageChange((currentPage as number) + 1)"
-        variant="tertiary"
-      >
-        Next
-      </BaseButton>
+      <BaseButton class="px-4 py-2" :disabled="pagination.currPage === pagination.total"
+        @click="changePage(pagination.currPage + 1)" variant="tertiary" label="Next" />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onBeforeMount } from 'vue'
+import { useDebounceFn } from '@vueuse/core'
 import { ClArrowDownSm } from '@kalimahapps/vue-icons'
 import BaseButton from '@/components/common/BaseButton.vue'
+import BaseInput from '@/components/common/BaseInput.vue'
 
-defineProps<{
+const props = defineProps<{
   headers: { label: string; key: string; sortable?: boolean }[]
-  items: Record<string, unknown>[]
+  items?: Record<string, string>[]
   title?: string
-  paginated?: boolean
-  totalPages?: number
-  currentPage?: number
+  searchable?: boolean
+  isLoading?: boolean
+  perPageLimit?: number[]
+  pagination?: {
+    total: number
+    currPage: number
+  }
 }>()
 
 const emit = defineEmits<{
-  (e: 'sort', key: string): void
-  (e: 'page-change', page: number): void
+  (e: 'fetch', { query, page, perPage, sortBy }: { query: string; page: number; perPage: number; sortBy: string }): void
+  (e: 'change-limit', perPage: number): void
 }>()
 
+const searchQuery = ref('')
 const sortBy = ref('')
+const perPage = ref(10)
 
-const onSortByClick = (key: string) => {
-  sortBy.value = key
-  emit('sort', key)
+const onSearch = useDebounceFn(() => {
+  emit('fetch', {
+    query: searchQuery.value,
+    page: props.pagination?.currPage || 1,
+    perPage: perPage.value,
+    sortBy: sortBy.value,
+  })
+}, 300)
+
+const onSort = (key: string) => {
+  sortBy.value = sortBy.value === key ? '' : key
+  emit('fetch', {
+    query: searchQuery.value,
+    page: props.pagination?.currPage || 1,
+    perPage: perPage.value,
+    sortBy: sortBy.value,
+  })
 }
 
-const onPageChange = (page: number) => {
-  emit('page-change', page)
+const changePage = (page: number) => {
+  if (props.pagination) {
+    emit('fetch', {
+      query: searchQuery.value,
+      page,
+      perPage: perPage.value,
+      sortBy: sortBy.value,
+    })
+  }
 }
+
+onBeforeMount(() => {
+  emit('fetch', {
+    query: searchQuery.value,
+    page: props.pagination?.currPage || 1,
+    perPage: perPage.value,
+    sortBy: sortBy.value,
+  })
+})
 </script>
