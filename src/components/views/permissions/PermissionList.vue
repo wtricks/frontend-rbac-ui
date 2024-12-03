@@ -1,4 +1,5 @@
 <script setup lang="ts">
+// import { ref } from 'vue';
 import { BsX, BsChevronDown, BsChevronUp } from '@kalimahapps/vue-icons'
 
 import CheckBox from '@/components/common/CheckBox.vue';
@@ -24,6 +25,7 @@ const toggleGroup = (group: PermissionGroup) => {
 
 const toggleAllChildren = (group: PermissionGroup, checked: boolean) => {
   group.children.forEach((child) => (child.checked = checked))
+  group.checked = checked
 }
 </script>
 
@@ -33,7 +35,7 @@ const toggleAllChildren = (group: PermissionGroup, checked: boolean) => {
       <div class="flex items-center justify-between p-4 bg-gray-100 dark:bg-gray-700 cursor-pointer"
         @click="toggleGroup(group)">
         <div class="flex items-center gap-2">
-          <CheckBox v-model="group.checked" />
+          <CheckBox :model-value="group.checked" @update:model-value="toggleAllChildren(group, $event)"  />
           <div>
             <h3 class="text-sm font-semibold text-gray-800 dark:text-gray-200">
               {{ group.title }}

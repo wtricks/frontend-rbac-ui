@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-// import PermissionList from '@/components/views/permissions/PermissionList.vue'
+import PermissionList from '@/components/views/permissions/PermissionList.vue'
 import BaseInput from '@/components/common/BaseInput.vue'
 import BaseButton from '@/components/common/BaseButton.vue'
 import DashboardLayout from '@/components/layout/dashboard/DashboardLayout.vue';
@@ -22,6 +22,32 @@ const permissionData = ref<Permission>({
 })
 
 const permissions = ref<Module[]>([])
+
+const permissionsDummy = ref([
+  {
+    id: 1,
+    title: 'Group 1',
+    description: 'Group 1 description',
+    checked: false,
+    expanded: false,
+    children: [
+      { id: 2, title: 'Child 1', description: 'Child 1 description', checked: false, expanded: false, children: [] },
+      { id: 3, title: 'Child 2', description: 'Child 2 description', checked: false, expanded: false, children: [] },
+      { id: 4, title: 'Child 3', description: 'Child 3 description', checked: false, expanded: false, children: [] },
+    ],
+  },
+  {
+    id: 5,
+    title: 'Group 2',
+    description: 'Group 2 description',
+    checked: false,
+    expanded: false,
+    children: [
+      { id: 6, title: 'Child 4', description: 'Child 4 description', checked: false, expanded: false, children: [] },
+      { id: 7, title: 'Child 5', description: 'Child 5 description', checked: false, expanded: false, children: [] },
+    ],
+  }
+])
 
 const addModule = () => {
   console.log('Module added:', moduleData.value)
@@ -69,7 +95,7 @@ const addPermission = () => {
 
       <div class="bg-white dark:bg-gray-800 shadow rounded p-4">
         <h2 class="text-lg font-semibold mb-4 text-gray-700 dark:text-gray-300">Permissions List</h2>
-        <!-- <PermissionList :permissions="permissions" /> -->
+        <PermissionList :permissions="permissionsDummy" />
       </div>
     </div>
   </DashboardLayout>

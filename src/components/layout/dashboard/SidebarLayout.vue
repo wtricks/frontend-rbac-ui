@@ -77,7 +77,7 @@ const menuItems = [
       },
       {
         label: 'Permissions',
-        path: '/dashboard/permissions',
+        path: '/dashboard/users/permissions',
         icon: AnOutlinedLock,
       },
     ],

@@ -2,7 +2,7 @@
   <div class="flex items-center space-x-3">
     <div
       @click="toggleCheckbox"
-      class="relative flex justify-center items-center w-6 h-6 border-2 rounded-md cursor-pointer select-none transition-colors duration-200"
+      class="relative flex justify-center items-center w-4 h-4 border-2 rounded-md cursor-pointer select-none transition-colors duration-200"
       :class="{
         'bg-blue-500 border-blue-500': isChecked,
         'bg-gray-200 dark:bg-gray-700 border-gray-400 dark:border-gray-600': !isChecked
