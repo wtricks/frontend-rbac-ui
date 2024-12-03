@@ -4,8 +4,8 @@
       @click="toggleCheckbox"
       class="relative flex justify-center items-center w-6 h-6 border-2 rounded-md cursor-pointer select-none transition-colors duration-200"
       :class="{
-        'bg-blue-500 border-blue-500': modelValue,
-        'bg-gray-200 dark:bg-gray-700 border-gray-400 dark:border-gray-600': !modelValue
+        'bg-blue-500 border-blue-500': isChecked,
+        'bg-gray-200 dark:bg-gray-700 border-gray-400 dark:border-gray-600': !isChecked
       }"
     >
       <svg
@@ -31,19 +31,13 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
-
 defineProps<{
-  modelValue: boolean
   label?: string
 }>()
 
-const emit = defineEmits(['update:modelValue'])
-
-const isChecked = ref(false)
+const isChecked = defineModel<boolean>()
 
 const toggleCheckbox = () => {
   isChecked.value = !isChecked.value
-  emit('update:modelValue', isChecked.value)
 }
 </script>
