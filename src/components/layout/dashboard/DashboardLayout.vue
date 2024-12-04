@@ -72,7 +72,7 @@
         </div>
       </header>
 
-      <main class="flex-1 p-4 overflow-auto">
+      <main class="flex-1 p-4 overflow-auto" style="max-width: 100vw">
         <slot />
       </main>
     </div>

@@ -1,6 +1,6 @@
 <template>
   <aside
-    class="flex flex-col w-64 bg-white border-r dark:bg-gray-800 dark:border-gray-700 transition-all duration-300 fixed md:static top-0 left-0 h-screen"
+    class="flex flex-col z-30 w-64 bg-white border-r dark:bg-gray-800 dark:border-gray-700 transition-all duration-300 fixed md:static top-0 left-0 h-screen"
     :class="{ 'md:w-20 -translate-x-full md:translate-x-0': isCollapsed }"
   >
     <div class="flex items-center justify-center h-16 border-b dark:border-gray-700 px-4">

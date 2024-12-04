@@ -9,12 +9,14 @@ import {
   resetPassword,
   verifyEmail,
 } from "@/services/authServices";
+import { fetchRoleById } from "@/services/rolesServices";
 
 const useAuthStore = defineStore("auth", () => {
   const isAuthenticated = ref(false);
   const user = ref<User | null>(null);
   const loading = ref(false);
   const error = ref<string | null>(null);
+  const permissions = ref<string[]>([]);
 
   const loginUser = async (email: string, password: string) => {
     loading.value = true;
@@ -33,19 +35,12 @@ const useAuthStore = defineStore("auth", () => {
     }
   };
 
-/*************  ✨ Codeium Command ⭐  *************/
-  /**
-   * Logs out the user from the application by clearing the user's
-   * state and removing the access token from local storage.
-   */
-/******  36ee7c24-9bd0-440f-b472-aeac4a829de9  *******/
   const logoutUser = () => {
     user.value = null;
     isAuthenticated.value = false;
 
     localStorage.removeItem("__accessToken__");
   };
-
 
   const registerUser = async (
     name: string,
@@ -113,6 +108,19 @@ const useAuthStore = defineStore("auth", () => {
     }
   };
 
+  const getPermissions = async () => {
+    if (user.value && user.value.role && permissions.value.length === 0) {
+      await fetchRoleById(user.value.role).then((role) => {
+        if (role) {
+          permissions.value = role.permissions.map((permission) => permission.slug);
+        }
+      })
+
+      return permissions.value
+    }
+    return permissions.value;
+  };
+
   // We are using json server here, so we'll store the user data in local storage.
   // In a real application, we would use a database (e.g. Firebase, MongoDB, etc.).
   if (localStorage.getItem("__accessToken__")) {
@@ -137,6 +145,7 @@ const useAuthStore = defineStore("auth", () => {
     requestPasswordReset,
     resetUserPassword,
     verifyUserEmail,
+    getPermissions
   };
 });
 

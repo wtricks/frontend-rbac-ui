@@ -40,7 +40,7 @@
         v-if="isTextarea"
         v-bind="commonProps"
         :class="['flex-1 bg-transparent outline-none resize-none text-gray-700 dark:text-gray-300', inputClass]"
-        v-model="inputValue"
+        v-model="(inputValue as string)"
       />
 
       <span
@@ -65,7 +65,7 @@ import type { InputProps } from './types'
 const props = defineProps<InputProps>()
 
 const emit = defineEmits<{
-  (e: 'update:modelValue', value: string | number): void
+  (e: 'update:modelValue', value: string | number | boolean): void
   (e: 'right-icon-click'): void
 }>()
 
@@ -73,7 +73,7 @@ const isSelect = computed(() => props.type === 'select')
 const isTextarea = computed(() => props.type === 'textarea')
 const tag = computed(() => (isSelect.value || isTextarea.value ? 'div' : 'input'))
 
-const inputValue = defineModel<string | number>()
+const inputValue = defineModel<string | number | boolean>()
 
 const commonProps = {
   id: props.id,
