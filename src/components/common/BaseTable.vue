@@ -45,7 +45,7 @@
             <template v-if="$slots[`header-${header.key}`]">
               <slot :name="`header-${header.key}`" :item="item" :header="header.key"></slot>
             </template>
-            <spam>{{ item[header.key] }}</spam>
+            <span>{{ item[header.key] }}</span>
           </td>
         </tr>
       </tbody>

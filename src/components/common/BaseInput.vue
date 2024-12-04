@@ -16,18 +16,22 @@
         <component :is="iconLeft" />
       </span>
 
+      <!-- TODO: v-model not working -->
       <component
         v-if="!isSelect && !isTextarea"
         :is="tag"
         v-bind="commonProps"
         :class="['flex-1 bg-transparent outline-none', inputClass]"
         :type="type"
+        :value="inputValue"
+        @input="inputValue = $event.target.value"
       />
 
       <select
         v-if="isSelect"
         v-bind="commonProps"
         :class="['flex-1 bg-transparent outline-none', inputClass]"
+        v-model="inputValue"
       >
         <slot name="options" />
       </select>
@@ -36,6 +40,7 @@
         v-if="isTextarea"
         v-bind="commonProps"
         :class="['flex-1 bg-transparent outline-none resize-none', inputClass]"
+        v-model="inputValue"
       />
 
       <span
@@ -68,13 +73,13 @@ const isSelect = computed(() => props.type === 'select')
 const isTextarea = computed(() => props.type === 'textarea')
 const tag = computed(() => (isSelect.value || isTextarea.value ? 'div' : 'input'))
 
+const inputValue = defineModel<string | number>()
+
 const commonProps = {
   id: props.id,
   name: props.name,
-  value: props.modelValue, // TODO: 'defineModel' can be used here
   placeholder: props.placeholder,
-  disabled: props.disabled,
-  onInput: (e: Event) => emit('update:modelValue', (e.target as HTMLInputElement).value), // TODO: 'defineModel' can be used here
+  disabled: props.disabled
 }
 
 const variantClass = computed(() => {
