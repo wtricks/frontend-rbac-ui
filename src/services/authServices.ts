@@ -9,6 +9,7 @@ export interface User {
   email: string;
   avatar: string;
   password?: string;
+  role: string;
   emailVerified: boolean;
   rememberMe: boolean;
   createdAt: string;

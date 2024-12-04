@@ -21,7 +21,7 @@
         v-if="!isSelect && !isTextarea"
         :is="tag"
         v-bind="commonProps"
-        :class="['flex-1 bg-transparent outline-none', inputClass]"
+        :class="['flex-1 bg-transparent outline-none text-gray-700 dark:text-gray-300', inputClass]"
         :type="type"
         :value="inputValue"
         @input="inputValue = $event.target.value"
@@ -30,7 +30,7 @@
       <select
         v-if="isSelect"
         v-bind="commonProps"
-        :class="['flex-1 bg-transparent outline-none', inputClass]"
+        :class="['flex-1 bg-transparent outline-none text-gray-700 dark:text-gray-300', inputClass]"
         v-model="inputValue"
       >
         <slot name="options" />
@@ -39,7 +39,7 @@
       <textarea
         v-if="isTextarea"
         v-bind="commonProps"
-        :class="['flex-1 bg-transparent outline-none resize-none', inputClass]"
+        :class="['flex-1 bg-transparent outline-none resize-none text-gray-700 dark:text-gray-300', inputClass]"
         v-model="inputValue"
       />
 

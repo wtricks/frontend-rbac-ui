@@ -29,7 +29,7 @@ const privateRoutes: RouteRecordRaw[] = [
           {
             path: 'new',
             name: 'new-user',
-            component: () => import('@/views/dashboard/NewUserView.vue'),
+            component: () => import('@/views/dashboard/SingleUserView.vue'),
             meta: {
               title: 'New user | RBAC',
             }
@@ -37,17 +37,9 @@ const privateRoutes: RouteRecordRaw[] = [
           {
             path: 'edit/:id',
             name: 'edit-user',
-            component: () => import('@/views/dashboard/EditUserView.vue'),
+            component: () => import('@/views/dashboard/SingleUserView.vue'),
             meta: {
               title: 'Edit user | RBAC',
-            }
-          },
-          {
-            path: ':id',
-            name: 'single-user',
-            component: () => import('@/views/dashboard/ProfileView.vue'),
-            meta: {
-              title: 'Single user | RBAC',
             }
           },
           {
@@ -92,7 +84,7 @@ const privateRoutes: RouteRecordRaw[] = [
       {
         path: 'profile',
         name: 'profile',
-        component: () => import('@/views/dashboard/ProfileView.vue'),
+        component: () => import('@/views/dashboard/SingleUserView.vue'),
         meta: {
           title: 'Profile | RBAC',
         }
