@@ -60,8 +60,8 @@ const deleteUser = (user: User) => {
     >
       <template #header-action="{ item }">
         <div class="flex items-center gap-2">
-          <BaseButton :icon="ByEdit" variant="tertiary" class="!px-2" @click="$router.push({ name: 'edit-user', params: { id: (item as User).id }})" />
-          <BaseButton :icon="BsTrash" variant="tertiary" class="!px-2 text-red-500" @click="deleteUser(item as User)" />
+          <BaseButton type="button" :icon="ByEdit" variant="tertiary" class="!px-2" @click="$router.push({ name: 'edit-user', params: { id: (item as User).id }})" />
+          <BaseButton type="button" :icon="BsTrash" variant="tertiary" class="!px-2 text-red-500" @click="deleteUser(item as User)" />
         </div>
       </template>
     </BaseTable>

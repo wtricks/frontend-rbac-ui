@@ -31,6 +31,7 @@ const permissionData = ref({
 });
 
 const currentEditRoleId = ref<string | null>(route.params.id as string);
+const currentEditPermissionIndex = ref<number>(-1);
 
 onMounted(async () => {
   const roleId = route.params.id;
@@ -45,30 +46,26 @@ const addPermission = () => {
     return;
   }
 
-  if (roleData.value.permissions.some((p) => p.slug === permissionData.value.slug)) {
+  if (
+    roleData.value.permissions.some((p) => p.slug === permissionData.value.slug) &&
+    (currentEditPermissionIndex.value === -1 || roleData.value.permissions[currentEditPermissionIndex.value!].slug !== permissionData.value.slug)) {
     toast.error("Permission already exists");
     return;
   }
 
-  roleData.value.permissions.push({ ...permissionData.value });
+  if (currentEditPermissionIndex.value !== -1) {
+    roleData.value.permissions[currentEditPermissionIndex.value!] = { ...permissionData.value };
+    currentEditPermissionIndex.value = -1;
+  } else {
+    roleData.value.permissions.push({ ...permissionData.value });
+  }
+
   permissionData.value = { name: "", description: "", slug: "" };
 };
 
 const updatePermission = (permission: Permission) => {
-  if (!permissionData.value.name || !permissionData.value.description || !permissionData.value.slug) {
-    toast.error("All permission fields are required");
-    return;
-  }
-
-  if (roleData.value.permissions.some((p) => p.slug === permissionData.value.slug && permission !== p)) {
-    toast.error("Permission already exists");
-    return;
-  }
-
-  permission.name = permissionData.value.name;
-  permission.description = permissionData.value.description;
-  permission.slug = permissionData.value.slug;
-  permissionData.value = { name: "", description: "", slug: "" };
+  currentEditPermissionIndex.value = roleData.value.permissions.indexOf(permission);
+  permissionData.value = { ...permission };
 };
 
 const removePermission = (permission: Permission) => {
@@ -85,13 +82,13 @@ const saveRole = async () => {
   if (currentEditRoleId.value) {
     rolesStore.editRole(currentEditRoleId.value, { ...roleData.value }).then(() => {
       toast.success("Role updated successfully");
-    }).then(err => {
+    }).catch(err => {
       toast.error(err);
     })
   } else {
     rolesStore.addRole({ ...roleData.value, createdBy: authStore.user?.name || "" }).then(() => {
       toast.success("Role added successfully");
-    }).then(err => {
+    }).catch(err => {
       toast.error(err);
     })
   }
@@ -103,36 +100,42 @@ const saveRole = async () => {
     <form class="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-md space-y-6 w-full" @submit.prevent="saveRole">
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div class="space-y-4">
-          <BaseInput variant="secondary" v-model="roleData.name" name="title" type="text" label="Role Title" placeholder="Enter role title" required />
-          <BaseInput variant="secondary" v-model="roleData.description" name="description" type="textarea" label="Role Description" placeholder="Enter role description" required />
-          <BaseInput variant="secondary" v-model="roleData.slug" name="slug" type="text" label="Slug" placeholder="Enter slug (alphabets only)" pattern="[A-Za-z]+" required />
+          <BaseInput variant="secondary" v-model="roleData.name" name="title" type="text" label="Role Title"
+            placeholder="Enter role title" required />
+          <BaseInput variant="secondary" v-model="roleData.description" name="description" type="textarea"
+            label="Role Description" placeholder="Enter role description" required />
+          <BaseInput variant="secondary" v-model="roleData.slug" name="slug" type="text" label="Slug"
+            placeholder="Enter slug (alphabets only)" pattern="[A-Za-z]+" required />
         </div>
 
         <div class="space-y-4">
-          <BaseInput variant="secondary" v-model="permissionData.name" name="title" type="text" label="Permission Title" placeholder="Enter permission title" required />
-          <BaseInput variant="secondary" v-model="permissionData.description" name="description" type="textarea" label="Permission Description" placeholder="Enter permission description" required />
-          <BaseInput variant="secondary" v-model="permissionData.slug" name="slug" type="text" label="Permission Slug" placeholder="Enter permission slug (alphabets only)" pattern="[A-Za-z]+" required />
+          <BaseInput variant="secondary" v-model="permissionData.name" name="title" type="text" label="Permission Title"
+            placeholder="Enter permission title" required />
+          <BaseInput variant="secondary" v-model="permissionData.description" name="description" type="textarea"
+            label="Permission Description" placeholder="Enter permission description" required />
+          <BaseInput variant="secondary" v-model="permissionData.slug" name="slug" type="text" label="Permission Slug"
+            placeholder="Enter permission slug (alphabets only)" pattern="[A-Za-z]+" required />
 
           <div class="flex items-center gap-4">
-            <BaseButton type="button" @click="addPermission" label="Add Permission" variant="secondary" class="!px-6 ml-auto" />
+            <BaseButton type="button" @click="addPermission" :label="currentEditPermissionIndex !== -1 ? 'Update Permission' : 'Add Permission'" variant="secondary"
+              class="!px-6 ml-auto" />
           </div>
         </div>
       </div>
 
       <BaseTable
         :headers="[{ key: 'name', label: 'Name' }, { key: 'description', label: 'Description' }, { key: 'slug', label: 'Slug' }, { key: 'action', label: 'Action' }]"
-        :items="roleData.permissions"
-        title="Existing Permissions"
-      >
+        :items="roleData.permissions" title="Existing Permissions">
         <template #header-action="{ item }">
           <div class="flex items-center gap-2">
-            <BaseButton :icon="ByEdit" variant="tertiary" class="!px-2" @click="updatePermission(item)" />
-            <BaseButton :icon="BsTrash" variant="tertiary" class="!px-2 text-red-500" @click="removePermission(item)" />
+            <BaseButton type="button" :icon="ByEdit" variant="tertiary" class="!px-2" @click="updatePermission(item)" />
+            <BaseButton type="button" :icon="BsTrash" variant="tertiary" class="!px-2 text-red-500" @click="removePermission(item)" />
           </div>
         </template>
       </BaseTable>
 
-      <BaseButton type="submit" class="mt-6" :label="currentEditRoleId ? 'Update Role' : 'Add Role'" variant="primary" />
+      <BaseButton type="submit" class="mt-6" :label="currentEditRoleId ? 'Update Role' : 'Add Role'"
+        variant="primary" />
     </form>
   </DashboardLayout>
 </template>

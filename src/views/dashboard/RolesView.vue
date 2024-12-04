@@ -57,8 +57,8 @@ watch(() => rolesStore.error, (error) => {
       :pagination="rolesStore.pagination" :is-loading="rolesStore.isLoading">
       <template #header-action="{ item }">
         <div class="flex items-center gap-2">
-          <BaseButton :icon="ByEdit" variant="tertiary" class="!px-2" @click="$router.push({ name: 'edit-role', params: { id: (item as Role).id }})" />
-          <BaseButton :icon="BsTrash" variant="tertiary" class="!px-2 text-red-500" @click="deleteRole(item)" />
+          <BaseButton type="button" :icon="ByEdit" variant="tertiary" class="!px-2" @click="$router.push({ name: 'edit-role', params: { id: (item as Role).id }})" />
+          <BaseButton type="button" :icon="BsTrash" variant="tertiary" class="!px-2 text-red-500" @click="deleteRole(item)" />
         </div>
       </template>
     </BaseTable>

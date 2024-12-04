@@ -79,7 +79,7 @@
           "slug": "view:dashboard"
         }
       ],
-      "updatedAt": "2024-12-04T15:50:17.913Z"
+      "updatedAt": "2024-12-04T19:59:10.240Z"
     },
     {
       "id": "2",
@@ -108,7 +108,7 @@
           "name": "Create Users",
           "description": "Create new users",
           "slug": "create:users"
-        }, 
+        },
         {
           "name": "View dashboard",
           "description": "View dashboard",
