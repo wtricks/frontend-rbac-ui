@@ -1,7 +1,7 @@
 <template>
   <div class="flex items-center space-x-3">
     <div
-      @click="toggleCheckbox"
+      @click.stop="toggleCheckbox"
       class="relative flex justify-center items-center w-4 h-4 border-2 rounded-md cursor-pointer select-none transition-colors duration-200"
       :class="{
         'bg-blue-500 border-blue-500': isChecked,
@@ -22,7 +22,7 @@
     </div>
 
     <label
-      @click="toggleCheckbox"
+      @click.stop="toggleCheckbox"
       class="text-sm font-medium text-gray-700 dark:text-gray-300 cursor-pointer"
     >
       {{ label }}
