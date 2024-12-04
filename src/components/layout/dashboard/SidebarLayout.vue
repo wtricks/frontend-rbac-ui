@@ -36,7 +36,7 @@ import { computed, ref, watch } from 'vue'
 import { useDebounceFn } from '@vueuse/core'
 import {
   AnOutlinedLock,
-  AnOutlinedUser,
+  CaUserSettings,
   AnOutlinedUserAdd,
   BsGrid1x2,
   LuUsers,
@@ -74,6 +74,11 @@ const menuItems = [
         label: 'View Users',
         path: '/dashboard/users',
         icon: LuUsers,
+      },
+      {
+        label: 'Roles',
+        path: '/dashboard/users/roles',
+        icon: CaUserSettings,
       },
       {
         label: 'Permissions',
