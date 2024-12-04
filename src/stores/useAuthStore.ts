@@ -28,6 +28,7 @@ const useAuthStore = defineStore("auth", () => {
       isAuthenticated.value = true;
 
       localStorage.setItem("__accessToken__", response.accessToken);
+      getPermissions();
     } catch (err) {
       throw error.value = (err as Error).message || "Login failed. Please try again.";
     } finally {
@@ -126,6 +127,7 @@ const useAuthStore = defineStore("auth", () => {
   if (localStorage.getItem("__accessToken__")) {
     isAuthenticated.value = true;
     user.value = JSON.parse(localStorage.getItem("__user__") || "{}");
+    getPermissions();
   }
 
   watch(user, () => {
@@ -139,6 +141,7 @@ const useAuthStore = defineStore("auth", () => {
     user,
     loading,
     error,
+    permissions,
     loginUser,
     logoutUser,
     registerUser,

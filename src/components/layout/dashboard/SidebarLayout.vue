@@ -35,7 +35,6 @@
 import { computed, ref, watch } from 'vue'
 import { useDebounceFn } from '@vueuse/core'
 import {
-  AnOutlinedLock,
   CaUserSettings,
   AnOutlinedUserAdd,
   BsGrid1x2,
@@ -46,8 +45,11 @@ import {
 import SidebarMenuItem from './SidebarMenuItem.vue'
 import Logo from '@/assets/logo.png'
 import BaseButton from '@/components/common/BaseButton.vue'
+import useAuthStore from '@/stores/useAuthStore';
 
 const props = defineProps<{ isCollapsed: boolean }>()
+
+const authStore = useAuthStore();
 
 const isMenuCollapsed = ref(props.isCollapsed)
 const debounceCollapsed = computed(() => (props.isCollapsed ? true : isMenuCollapsed.value))
