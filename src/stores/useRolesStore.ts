@@ -38,7 +38,7 @@ const useRolesStore = defineStore("roles", () => {
   const loadRoleById = async (id: string) => {
     try {
       loading.value = true;
-      currentRole.value = await fetchRoleById(id);
+      return await fetchRoleById(id);
     } catch (err) {
       throw error.value = (err as Error).message || `Failed to load role with ID ${id}`;
     } finally {

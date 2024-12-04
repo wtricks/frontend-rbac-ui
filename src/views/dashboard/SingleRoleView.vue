@@ -33,8 +33,7 @@ const currentEditRoleId = ref<string | null>(route.params.id as string);
 onMounted(async () => {
   const roleId = route.params.id;
   if (roleId) {
-    await rolesStore.loadRoleById(roleId as string);
-    roleData.value = rolesStore.currentRole!;
+    roleData.value = await rolesStore.loadRoleById(roleId as string);
   }
 });
 
@@ -84,11 +83,15 @@ const saveRole = async () => {
   if (currentEditRoleId.value) {
     rolesStore.editRole(currentEditRoleId.value, { ...roleData.value }).then(() => {
       toast.success("Role updated successfully");
-    });
+    }).then(err => {
+      toast.error(err);
+    })
   } else {
     rolesStore.addRole({ ...roleData.value, createdBy: "Admin" }).then(() => {
       toast.success("Role added successfully");
-    });
+    }).then(err => {
+      toast.error(err);
+    })
   }
 };
 </script>

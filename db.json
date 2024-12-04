@@ -37,6 +37,18 @@
       "updatedAt": "2024-11-19T11:30:00Z"
     }
   ],
-  "users": [],
+  "users": [
+    {
+      "id": "a5vqrc",
+      "name": "Anuj Kumar",
+      "email": "anujkumar@gmail.com",
+      "password": "123456",
+      "avatar": "",
+      "rememberMe": true,
+      "createdAt": "2024-12-04T17:28:00.312Z",
+      "updatedAt": "2024-12-04T17:28:00.312Z",
+      "emailVerified": true
+    }
+  ],
   "tokens": []
 }
