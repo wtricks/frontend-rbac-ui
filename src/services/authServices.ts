@@ -10,6 +10,7 @@ export interface User {
   avatar: string;
   password?: string;
   role: string;
+  isActive?: boolean;
   emailVerified: boolean;
   rememberMe: boolean;
   createdAt: string;
@@ -29,6 +30,7 @@ export const register = async (user: Omit<User, 'id' | 'createdAt' | 'updatedAt'
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
     emailVerified: false,
+    isActive: true,
   }
 
   // check if email already exists
@@ -68,6 +70,11 @@ export const login = async (email: string, password: string): Promise<{ user: Us
   // Check if the user has verified their email
   if (!response.data[0].emailVerified) {
     throw new Error('Please verify your email before logging in');
+  }
+
+  // Check if the user is active
+  if (!response.data[0].isActive) {
+    throw new Error('Your account is inactive. Please contact support.');
   }
 
   return {
