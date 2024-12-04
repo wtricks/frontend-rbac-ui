@@ -10,7 +10,9 @@ import DashboardLayout from "@/components/layout/dashboard/DashboardLayout.vue";
 import useRolesStore from "@/stores/useRolesStore";
 import type { Permission } from "@/services/rolesServices";
 import BaseTable from "@/components/common/BaseTable.vue";
+import useAuthStore from "@/stores/useAuthStore";
 
+const authStore = useAuthStore();
 const rolesStore = useRolesStore();
 const toast = useToast();
 const route = useRoute();
@@ -87,7 +89,7 @@ const saveRole = async () => {
       toast.error(err);
     })
   } else {
-    rolesStore.addRole({ ...roleData.value, createdBy: "Admin" }).then(() => {
+    rolesStore.addRole({ ...roleData.value, createdBy: authStore.user?.name || "" }).then(() => {
       toast.success("Role added successfully");
     }).then(err => {
       toast.error(err);
