@@ -3,44 +3,153 @@
     {
       "id": "1",
       "name": "Admin",
-      "description": "Administrator with full access to all features and settings. added line",
+      "description": "Administrator with full access to all features and settings.",
       "slug": "admin",
       "createdAt": "2024-11-01T10:00:00Z",
       "createdBy": "System",
       "permissions": [
         {
-          "name": "Update",
-          "description": "Update",
-          "slug": "update"
+          "name": "Views Users",
+          "description": "View all users",
+          "slug": "view:users"
+        },
+        {
+          "name": "Edit Users",
+          "description": "Edit any user",
+          "slug": "edit:users"
+        },
+        {
+          "name": "Delete Users",
+          "description": "Delete any user",
+          "slug": "delete:users"
+        },
+        {
+          "name": "Create Users",
+          "description": "Create new users",
+          "slug": "create:users"
+        },
+        {
+          "name": "Assign Roles",
+          "description": "Assign roles to users",
+          "slug": "assign:roles"
+        },
+        {
+          "name": "Views Roles",
+          "description": "View all roles",
+          "slug": "view:roles"
+        },
+        {
+          "name": "Edit Roles",
+          "description": "Edit any role",
+          "slug": "edit:roles"
+        },
+        {
+          "name": "Delete Roles",
+          "description": "Delete any role",
+          "slug": "delete:roles"
+        },
+        {
+          "name": "Views Permissions",
+          "description": "View all permissions",
+          "slug": "view:permissions"
+        },
+        {
+          "name": "Edit Permissions",
+          "description": "Edit any permission",
+          "slug": "edit:permissions"
+        },
+        {
+          "name": "Delete Permissions",
+          "description": "Delete any permission",
+          "slug": "delete:permissions"
+        },
+        {
+          "name": "View activity logs",
+          "description": "View activity logs",
+          "slug": "view:activity-logs"
+        },
+        {
+          "name": "Edit activity logs",
+          "description": "Edit activity logs",
+          "slug": "edit:activity-logs"
         }
       ],
       "updatedAt": "2024-12-04T15:50:17.913Z"
     },
+    {
+      "id": "2",
+      "name": "Moderator",
+      "description": "Moderator with limited access to some features and settings.",
+      "slug": "moderator",
+      "createdAt": "2024-11-01T10:00:00Z",
+      "createdBy": "System",
+      "permissions": [
+        {
+          "name": "Views Users",
+          "description": "View all users",
+          "slug": "view:users"
+        },
+        {
+          "name": "Edit Users",
+          "description": "Edit any user",
+          "slug": "edit:users"
+        },
+        {
+          "name": "Delete Users",
+          "description": "Delete any user",
+          "slug": "delete:users"
+        },
+        {
+          "name": "Create Users",
+          "description": "Create new users",
+          "slug": "create:users"
+        }
+      ],
+      "updatedAt": "2024-12-04T15:50:17.913Z"
+    },
+    {
+      "id": "3",
+      "name": "User",
+      "description": "User with limited access to some features and settings.",
+      "slug": "user",
+      "createdAt": "2024-11-01T10:00:00Z",
+      "createdBy": "System",
+      "permissions": [
+        {
+          "name": "Views Users",
+          "description": "View all users",
+          "slug": "view:users"
+        }
+      ],
+      "updatedAt": "2024-12-04T15:50:17.913Z"
+    }
   ],
   "users": [
     {
       "id": "a5vqrc",
-      "name": "Anuj Kumar",
-      "email": "anujkumar@gmail.com",
+      "name": "User 1",
+      "email": "user1@gmail.com",
       "password": "123456",
       "avatar": "",
       "rememberMe": true,
+      "isActive": true,
+      "role": "1",
       "createdAt": "2024-12-04T17:28:00.312Z",
       "updatedAt": "2024-12-04T17:28:00.312Z",
       "emailVerified": true
     },
     {
       "id": "fxxkm2hcmmr",
-      "name": "Learning App",
-      "email": "nanowiz@gmail.com",
-      "avatar": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAOEAAADhCAMAAAAJbSJIAAAAolBMVEXw7+vzYwb////w9PLzXQDw8e7zVwDw59zw3czypX3yoHXzYgDzWwD8/Pvw7+zz8u/39vTw9/bw4NTzbiDw7ebx08Hx18fyjlvyi1XyqYXxvKDzcyzw5NrzZgfxsZHw4NPzeTbxzrnylWb60Lvzahbxz7vyezvxxa3ygEPymm3xuZzzdS/yh0799O73spH749X5uKDxwqn6zbf5wKX85t72lWyGcuFSAAAL50lEQVR4nO3daVviOhQAYGiaKqSlKOigI66M+zKo8///2k1BpEuWc05SbXs998s8dwbsa07Wpk0vqD+SZDwepzJGvXWM5J/l/xonyRf89F6dXy5padozxiiz1gqtSyiLzWIrRI3MOoQJCpdn1qH0Lkxouk34R3oVUguv1qL0KPTC2yD9XZYvoWNyKpC+CtKP0GPxbWPkpyA9CJNxDbx1+KiRzkLv6VkM92R1FNbs82F0En6Bz93oIPwin6uRLqyvfVEav1z4tb4sqH0HTZiM7FfkPYipShJ+fQF+GL9ImHyTLwtCMeKFbi0oZ9zp8/hixArdCpCzm9sbRyO2GJFCpxrI2dljHMaPZ25GZKOKErr18WxnEIX9fj+MhjvM5YtwjSpG6JShvHe/iPvriOf3PadixBARQpcM5XsH57Hob0LED3/2XIyITIULXTKU7f+Ktr6VMZrtu1RHeJsKFTqMYkZsehSH/XKE0WDKHMZG0EwFCh2qIOfHk1hUgFl1XBxzh2IEEmFCOpDvHV6rfavqeH7oUB1hRJCQ3sawk8tI51tXx18n9J4D1N5AhGQgmz6LagUsVcfwaEo2QogAIRUoh2i/tQmaT9XfS3KrCiDahUQgZ7u3AN/aeL1LNdqJViERyHaGkS1Bc8bojlodrUSbkAbkvdN5bIflIp6f9mhGG9EiJAH53sU5MEHzqfpwQes5LESzkALM5kjGHkJrjIjzKjPRKCR09CM5R1IM0WAhB3I7lIGcses3CQlAzrdzJErEi3vKQM5ENAjxwNIciRK0edXIQDQI0elSnSORjNGMUB0pQux8UM6RQmoFLEYY4wdy+vmiVohsRjlbauZIhBDx5BhbjNoGVSfEVULODHMkmvH8EGnUVUWNEAdkJ3ceKmDJGF3u41JVQ9QIMZWQTU+tcyRKhOIUVR01VVEtRFRCvgeaI1FCzqtuMD2HuioqhfAczeZI3hM0Z4yuMdVRmadKIfgr5RyJPESDRRhj5lVQIbQS8t49co5EiWxeBS1GVVVUCIE5ytnFQ00VsBiyOl5AU1WRpwoh0Hc2I1RAEcr/8J+KHqHLHBAhqB2VcyTKEC0Mh2dD2geB86pqnlaEkBzl7HhBSFBZFLJlZIeUCbKQ8ypQMVbytCK0/6I4OzinXeP69i9nN5QhbDavAhgrhVgW2nOUnZDmSKF4/lxqYr3TOSFVRfQLMJAr9/tlodU3PaIM0UR8WejW5EiW0pGGAjCvMgstXSHfI82RRFSZKWSzEVqqH9sGcqlJaG5m6Fe1VFyVv99WORKD0FiE3jOLmvHRpXkgl+qFpiKspXXw0GqpItEK9UUo50i1tPDknmdimlelOqG2COUcidZLz+29NHn0cGuojolGqCnCkZwj1TnSoo8AtV+fqoWaIuRMzpFqHS1TR/FyXqVbIE+UQmURcvaHskiBmfGsfsqF35+SqoSqIpS/XVJjh5m1fvwkTsyUmTpTEoVQMSJl0wGlw8KtPHzEiLgiEoqBah/gWCGs/lrZkvZrRa0e5X8eaVVLVkfVAnlVWC7Cenoqi5G2MikiRa87rghL/8K21UcT2FXcchBXlxUjp7QsLLYzrEcdMSJX4hVG2h2C6ug3KQnzXYWchNOGGei7Kaogz2DmxY1HaUlY+Am0Cj+xztygxj3dbkbzFZSauKJw286wHdocyWV7WiWId1uLKwnjgvAzSflSEJaxXXf8Koy0O+ahWH5eRpoXbtsZNsQDgatguCDueoiH20JMcsJckg7R2UHcIWI3ZjtXsMZwWE7TXqklRQvDeHDisl3bEJTdR3lhmhNuvxUplBNR8sZJQOB3kOWFva0w192jhNibtBTjHu4OV0GYfApz3T1GSN8xiTKidnIWhOmnMPd9cKHDrldksBP4btyCsLcR5sekUKHLzmV0IHZUF4XJhzA/cYIJnXaf04zAeVVROP4Q5kfdIKHfIRosgPOqojD9EBa+yC50ewqEHqApa1HYWwsLU0Or0PFJHpcwPmGkFiYrYWH9wiZ0fBrLMTizzatKwjFWSN2I7S00T/pZhIWVYKOQupnea7B90wJ5SZiuhMXPG4QhZYjG+dTwt1NCyvO9G8M1FoUZr7wGpReKcAd/Oexstqv/FN+VWYH+Tr6j33VUFiZSWFwo9Socsd5AREZhJPDPyjZHyHm2aG4TxgLbOmOEYyks3nLyJ+TsYLVmZxGu1shwiyAYYVqbcPS5r8EqXK2RYVaSscLipz0JGf98PhYgXC1Zc3B1xAhH9Qg5v9netQIJZTGKG2h1xAilr3Rj1IOwtPsQJtzsXPQuTLwLK/saoMJsUnYHeukJUli6b+gq5Py+tAsYLsx2EGv3HlCFY79Czi9+lweNCGGWqpMLq/EbhWxXcbMBJfzYe+BVWNpjQhfKiY1y5w9SuNoKZF4jQQlTb0LOj4VycooWZj2H8R1E3yPkB7obt3jh6nbyH8OnvkPITrWzUoowM55qMxUpLA2VqMKBduGdJuyHAz/CylCQLNR+7JuF1UvtmvCnDH+EbRD6akubKyxfaveEXS/Dka8xTWOF3kZtP8IfYY1CP3P85gp9rWL8CL9T6Ge9tLlCXyvCTRb6uW/RXGHQK71ioGvCka/7h40VertD2mihl/v4jRWOfe02aaww+V8IwXuiWilE7WtrozBF7U1soxC3+7K9Quge4TYKE9Q+7zYKcXv1WyhMcc9btFA4xj0z00JhgnvuqYVC5LNr7RNun12DPX/YPuH2+UPYM6TtE2KfA26dMP8cMOhZ7tYJ889y55/H744w/zz+Nk07JCy8U2Gbph0SFt+L8dmadkgYFIWbNO2OsPx+mk1b0x1h+R1Dm0LsjLDynqhNW9MZYfVdX0HHhEFVOO6UUPXOvaRTQtV7E9dtTUeEyndfrguxI0L1+0tXhdgNoeYdtKtC7IZQ9x7hrBA7IdS+CzorxE4I9e/zloXYBaHhneyyELsgNL1XP0g7ICwdcFE+DaIDwsAsTFovLB80UzlnRv/uy1YI42EZVBFetVx4ZRUGdzpiG4TxXcVTFSa6j7dAKMLqsWSKY7yuND+1BcLotcpRnZ13qc7T5gvjS4VGJXxaKL+g8UKxeAIKNXnaeGFUaUe1wmCgfBFAw4XRQGnRnCX7oLjghgvDczVFI3wX1e9otlCId5RQDm0qX9JsYXUwYxEGz5Uuo9HC6EgH0Z+t/lgmNlkYz7QOvTCZlC66wcLwt+7ccZOw0vE3Vyjmqq7eLgxeil/UWKEIDw0Kk7A0tmmsUD2WAQmDt/x7dZoqjN6MBrMwuM8RGyqMTs0EizB4zr32r5HC6NkisAlzg/BGCvU9PVgYHG0StYlCzXwCJ/xM1OYJRWwtQZAw+Bs1VBjdA64eIvzoNJomFJZuAiMMrrKvbJhQhMaOHikMXhZhw4Th3DRUwwuDp0ncKGE8MQy2ScIgmUUNEkaP+ukSVZj1Go0R2vt5kjB4PdG+cdskPNS+qHvEDinC0Yli8d6LMEi0R5MbhEJ78Bxn9+rVdYswBWcoWqg8NNgmzE63VJ28bDktWi8c2y/TQag7vNskXJ0uVDnchJ2ZT/7RClEFSBBqju82C/vZycuFtx+zqe2wWo0wtV+gs1BZjDahTNXF9uRlzpbWsxvVQmwB0oSqYrQKs1R9OFgZYadFq4T4AqQKq40qQNhfH4jM2T7oSOOqkBMKkCysNKogYX918vIz7LToihDZhDoLy69igAmzswGgx/wVhaQEdRQWUhUqlEbgvysIcX28N2HeCBdCIyd08TkKt8YahW4+Z+HGWJvQ1edBKI3j2oRjZ58XoYwxG1LOCTeEiCpbYYnhRxgEL//iSL9jEMsL4/jyxdOV+RLKZH2dCR9IEUbicemn/LLwJ5TxvvzliMx4v940+0Zo4VUo4+n1bh7FJKXMzUj8e4WuoUHDtzCL97fHfiiVcKYQ2b9/fPNV9/JRhzCLl9fh7TyOrM7MFsXz27vli4eeQRV1CbN4er96/nc+j6IojkNJFR/a1Z9C2V7Kv5mf/zt6ffedmfmoU7iOZPxy9fb36G52/TCZLOb9+WIyebie3R39fbt68dGlW+I/u4VPpzmYb2QAAAAASUVORK5CYII=",
+      "name": "User 2",
+      "email": "user2@gmail.com",
+      "avatar": "",
       "password": "123456",
-      "role": "",
+      "isActive": true,
+      "role": "2",
       "emailVerified": true,
       "rememberMe": false,
       "createdAt": "2024-12-04T18:42:36.265Z",
-      "updatedAt": "2024-12-04T18:48:31.058Z",
-      "isActive": true
+      "updatedAt": "2024-12-04T18:48:31.058Z"
     }
   ],
   "tokens": []
