@@ -33,6 +33,12 @@ const useAuthStore = defineStore("auth", () => {
     }
   };
 
+/*************  ✨ Codeium Command ⭐  *************/
+  /**
+   * Logs out the user from the application by clearing the user's
+   * state and removing the access token from local storage.
+   */
+/******  36ee7c24-9bd0-440f-b472-aeac4a829de9  *******/
   const logoutUser = () => {
     user.value = null;
     isAuthenticated.value = false;
@@ -57,6 +63,7 @@ const useAuthStore = defineStore("auth", () => {
         password,
         avatar: "",
         rememberMe,
+        role: 'user'
       });
       user.value = response;
       isAuthenticated.value = false;
