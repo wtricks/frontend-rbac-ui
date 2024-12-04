@@ -2,6 +2,9 @@
 import DashboardLayout from '@/components/layout/dashboard/DashboardLayout.vue'
 import BaseTable from '@/components/common/BaseTable.vue'
 
+// TODO: fetch data, maybe from api
+// We can use JSON server for this, but for now we'll use a simple array
+// beacuse now our main focus on RBAC
 const stats = [
   { label: 'Users', value: 1250, icon: '👤' },
   { label: 'Revenue', value: '$45,700', icon: '💰' },
@@ -9,6 +12,9 @@ const stats = [
   { label: 'Support Tickets', value: 15, icon: '🎫' },
 ]
 
+// TODO: fetch data, maybe from api
+// We can use JSON server for this, but for now we'll use a simple array
+// beacuse now our main focus on RBAC
 const activities = [
   { user: 'John Doe', action: 'Created a new post', time: '2 hours ago' },
   { user: 'Jane Smith', action: 'Updated profile picture', time: '4 hours ago' },

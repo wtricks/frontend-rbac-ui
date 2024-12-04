@@ -10,6 +10,9 @@ const pagination = ref({
   currPage: 1,
 })
 
+// TODO: fetch data, maybe from api
+// We can use JSON server for this, but for now we'll use a simple array
+// beacuse now our main focus on RBAC
 const activities = ref([
   { user: 'John Doe', action: 'Created a new post', time: '2 hours ago' },
   { user: 'Jane Smith', action: 'Updated profile picture', time: '4 hours ago' },
@@ -20,13 +23,6 @@ const activities = ref([
   { user: 'David Lee', action: 'Commented on a post', time: '6 hours ago' },
   { user: 'Emma Brown', action: 'Joined the platform', time: '1 day ago' },
   { user: 'John Doe', action: 'Created a new post', time: '2 hours ago' },
-  { user: 'Jane Smith', action: 'Updated profile picture', time: '4 hours ago' },
-  { user: 'David Lee', action: 'Commented on a post', time: '6 hours ago' },
-  { user: 'Emma Brown', action: 'Joined the platform', time: '1 day ago' },
-  { user: 'John Doe', action: 'Created a new post', time: '2 hours ago' },
-  { user: 'Jane Smith', action: 'Updated profile picture', time: '4 hours ago' },
-  { user: 'David Lee', action: 'Commented on a post', time: '6 hours ago' },
-  { user: 'Emma Brown', action: 'Joined the platform', time: '1 day ago' },
 ])
 
 const fetchData = async () => {
