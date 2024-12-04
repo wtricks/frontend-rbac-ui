@@ -31,7 +31,7 @@ export interface QueryRole {
  * @param {QueryRole} params - Query parameters for roles
  * @returns {Promise<Role[]>} A promise that resolves with an array of roles
  */
-export const fetchRoles = async (params: QueryRole): Promise<Role[]> => {
+export const fetchRoles = async (params: QueryRole): Promise<{ data: Role[]; total: number }> => {
   const { page, pageSize = 10, search = "", sortBy = "name", sortDirection = "asc" } = params;
   const response = await apiClient.get("/roles", {
     params: {
@@ -42,7 +42,10 @@ export const fetchRoles = async (params: QueryRole): Promise<Role[]> => {
       _order: sortDirection,
     },
   });
-  return response.data;
+  return {
+    data: response.data,
+    total: parseInt(response.headers["x-total-count"] || "10"), // Default to 10
+  };
 };
 
 /**
@@ -97,4 +100,15 @@ export const updateRole = async (id: string, role: Partial<Role>): Promise<Role>
  */
 export const deleteRole = async (id: string): Promise<void> => {
   await apiClient.delete(`/roles/${id}`);
+};
+
+/**
+ * Checks if a role with the given slug exists
+ *
+ * @param {string} slug - The slug of the role to check
+ * @returns {Promise<boolean>} A promise that resolves with a boolean indicating whether the role exists
+ */
+export const existsRoleBySlug = async (slug: string): Promise<boolean> => {
+  const response = await apiClient.get(`/roles?slug=${slug}`);
+  return response.data.length > 0;
 };

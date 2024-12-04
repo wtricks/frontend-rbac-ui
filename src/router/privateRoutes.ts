@@ -52,11 +52,32 @@ const privateRoutes: RouteRecordRaw[] = [
           },
           {
             path: 'roles',
-            name: 'roles',
-            component: () => import('@/views/dashboard/RolesView.vue'),
-            meta: {
-              title: 'Roles | RBAC',
-            },
+            children: [
+              {
+                path: '',
+                name: 'roles',
+                component: () => import('@/views/dashboard/RolesView.vue'),
+                meta: {
+                  title: 'Roles | RBAC',
+                },
+              },
+              {
+                path: 'new',
+                name: 'new-role',
+                component: () => import('@/views/dashboard/SingleRoleView.vue'),
+                meta: {
+                  title: 'New role | RBAC',
+                }
+              },
+              {
+                path: ':id',
+                name: 'edit-role',
+                component: () => import('@/views/dashboard/SingleRoleView.vue'),
+                meta: {
+                  title: 'Update role | RBAC',
+                }
+              }
+            ]
           },
         ]
       },

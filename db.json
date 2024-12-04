@@ -7,8 +7,14 @@
       "slug": "admin",
       "createdAt": "2024-11-01T10:00:00Z",
       "createdBy": "System",
-      "permissions": [],
-      "updatedAt": "2024-12-04T10:54:33.427Z"
+      "permissions": [
+        {
+          "name": "Update",
+          "description": "Update",
+          "slug": "update"
+        }
+      ],
+      "updatedAt": "2024-12-04T15:50:17.913Z"
     },
     {
       "id": "2",

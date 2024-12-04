@@ -6,6 +6,7 @@ import {
   createRole,
   updateRole,
   deleteRole,
+  existsRoleBySlug,
   type Role,
   type QueryRole,
 } from "@/services/rolesServices";
@@ -15,11 +16,18 @@ const useRolesStore = defineStore("roles", () => {
   const currentRole = ref<Role | null>(null);
   const loading = ref(false);
   const error = ref<string | null>(null);
+  const pagination = ref({
+    currPage: 1,
+    perPage: 10,
+    total: 0,
+  })
 
   const loadRoles = async (query: QueryRole) => {
     try {
       loading.value = true;
-      roles.value = await fetchRoles(query);
+      const { data, total } = await fetchRoles(query)
+      pagination.value = { currPage: query.page, total, perPage: query.pageSize! }
+      roles.value = data
     } catch (err) {
       error.value = (err as Error).message || "Failed to load roles";
     } finally {
@@ -75,6 +83,14 @@ const useRolesStore = defineStore("roles", () => {
     }
   };
 
+  const roleExists = async (slug: string) => {
+    try {
+      return await existsRoleBySlug(slug);
+    } catch (err) {
+      error.value = (err as Error).message || `Failed to check role existence`;
+    }
+  }
+
   const totalRoles = computed(() => roles.value.length);
   const isLoading = computed(() => loading.value);
 
@@ -95,6 +111,8 @@ const useRolesStore = defineStore("roles", () => {
     editRole,
     removeRole,
     resetError,
+    roleExists,
+    pagination
   };
 });
 
