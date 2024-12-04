@@ -1,10 +1,17 @@
 import apiClient from "@/utils/apiClient";
 
+export interface Permission {
+  name: string
+  description: string
+  slug: string
+}
+
 export interface Role {
   id: string;
   name: string;
   description: string;
   slug: string;
+  permissions: Permission[];
   createdAt: string;
   createdBy: string;
   updatedAt: string;
@@ -60,6 +67,7 @@ export const createRole = async (
 ): Promise<Role> => {
   const response = await apiClient.post("/roles", {
     ...role,
+    id: Math.random().toString(36).substring(2, 22),
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
   });

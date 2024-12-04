@@ -51,14 +51,6 @@ const privateRoutes: RouteRecordRaw[] = [
             }
           },
           {
-            path: 'permissions',
-            name: 'permissions',
-            component: () => import('@/views/dashboard/PermissionView.vue'),
-            meta: {
-              title: 'Permissions | RBAC',
-            },
-          },
-          {
             path: 'roles',
             name: 'roles',
             component: () => import('@/views/dashboard/RolesView.vue'),

@@ -40,7 +40,8 @@ const saveRole = async () => {
   } else {
     rolesStore.addRole({
       ...roleData.value,
-      createdBy: "Admin"
+      createdBy: "Admin",
+      permissions: []
     }).then(() => {
       toast.success("Role added successfully");
     })

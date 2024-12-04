@@ -80,11 +80,6 @@ const menuItems = [
         path: '/dashboard/users/roles',
         icon: CaUserSettings,
       },
-      {
-        label: 'Permissions',
-        path: '/dashboard/users/permissions',
-        icon: AnOutlinedLock,
-      },
     ],
   },
 ]
