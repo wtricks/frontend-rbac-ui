@@ -4,6 +4,7 @@
     :icon-right="isPasswordVisible ? FeEyeOff : FeEye"
     :type="isPasswordVisible ? 'text' : 'password'"
     @right-icon-click="isPasswordVisible = !isPasswordVisible"
+    v-model="modelValue"
   />
 </template>
 
@@ -17,4 +18,5 @@ import type { InputProps } from './types'
 defineProps<InputProps>()
 
 const isPasswordVisible = ref(false)
+const modelValue = defineModel<string | number>()
 </script>

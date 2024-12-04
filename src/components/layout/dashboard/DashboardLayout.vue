@@ -81,6 +81,7 @@
 
 <script setup lang="ts">
 import { ref, watch } from 'vue'
+import { useRouter } from 'vue-router'
 import { BxLogOutCircle } from '@kalimahapps/vue-icons'
 import { onClickOutside, useEventListener } from '@vueuse/core'
 import { useLocalStorage } from '@vueuse/core'
@@ -94,6 +95,7 @@ import {
 
 import SidebarLayout from './SidebarLayout.vue'
 import BaseButton from '@/components/common/BaseButton.vue'
+import useAuthStore from '@/stores/useAuthStore'
 
 defineProps<{ title: string }>()
 
@@ -101,6 +103,9 @@ const isDark = useLocalStorage('_theme_', false)
 const isCollapsed = ref(window.innerWidth < 768)
 const showProfileMenu = ref(false)
 const menuRef = ref<HTMLLIElement>()
+
+const authStore = useAuthStore()
+const router = useRouter()
 
 onClickOutside(menuRef, () => {
   showProfileMenu.value = false
@@ -115,6 +120,7 @@ watch(isDark, () => {
 })
 
 const onLogout = () => {
-  //
+  authStore.logoutUser()
+  router.push({ name: 'login' })
 }
 </script>

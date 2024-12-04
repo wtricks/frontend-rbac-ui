@@ -29,7 +29,7 @@ const useRolesStore = defineStore("roles", () => {
       pagination.value = { currPage: query.page, total, perPage: query.pageSize! }
       roles.value = data
     } catch (err) {
-      error.value = (err as Error).message || "Failed to load roles";
+      throw error.value = (err as Error).message || "Failed to load roles";
     } finally {
       loading.value = false;
     }
@@ -40,7 +40,7 @@ const useRolesStore = defineStore("roles", () => {
       loading.value = true;
       currentRole.value = await fetchRoleById(id);
     } catch (err) {
-      error.value = (err as Error).message || `Failed to load role with ID ${id}`;
+      throw error.value = (err as Error).message || `Failed to load role with ID ${id}`;
     } finally {
       loading.value = false;
     }
@@ -52,7 +52,7 @@ const useRolesStore = defineStore("roles", () => {
       const newRole = await createRole(role);
       roles.value.push(newRole);
     } catch (err) {
-      error.value = (err as Error).message || "Failed to create role";
+      throw error.value = (err as Error).message || "Failed to create role";
     } finally {
       loading.value = false;
     }
@@ -65,7 +65,7 @@ const useRolesStore = defineStore("roles", () => {
       const index = roles.value.findIndex((role) => role.id === id);
       if (index !== -1) roles.value[index] = updatedRole;
     } catch (err) {
-      error.value = (err as Error).message || `Failed to update role with ID ${id}`;
+      throw error.value = (err as Error).message || `Failed to update role with ID ${id}`;
     } finally {
       loading.value = false;
     }
@@ -77,7 +77,7 @@ const useRolesStore = defineStore("roles", () => {
       await deleteRole(id);
       roles.value = roles.value.filter((role) => role.id !== id);
     } catch (err) {
-      error.value = (err as Error).message || `Failed to delete role with ID ${id}`;
+      throw error.value = (err as Error).message || `Failed to delete role with ID ${id}`;
     } finally {
       loading.value = false;
     }
@@ -87,7 +87,7 @@ const useRolesStore = defineStore("roles", () => {
     try {
       return await existsRoleBySlug(slug);
     } catch (err) {
-      error.value = (err as Error).message || `Failed to check role existence`;
+      throw error.value = (err as Error).message || `Failed to check role existence`;
     }
   }
 

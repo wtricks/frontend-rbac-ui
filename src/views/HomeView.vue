@@ -1,5 +1,8 @@
 <script setup lang="ts">
 import BaseButton from '@/components/common/BaseButton.vue';
+import useAuthStore from '@/stores/useAuthStore';
+
+const authStore = useAuthStore();
 </script>
 
 <template>
@@ -11,8 +14,12 @@ import BaseButton from '@/components/common/BaseButton.vue';
         </a>
 
         <div class="space-x-4 flex items-center">
-          <RouterLink asChild to="/auth/login" class="text-slate-800 dark:text-slate-200 hover:underline">
+          <RouterLink v-if="!authStore.isAuthenticated" asChild to="/auth/login" class="text-slate-800 dark:text-slate-200 hover:underline">
             <BaseButton label="Login" variant="secondary" />
+          </RouterLink>
+
+          <RouterLink v-else asChild to="/auth/register" class="text-slate-800 dark:text-slate-200 hover:underline">
+            <BaseButton label="Dashboard" variant="primary" />
           </RouterLink>
         </div>
       </nav>
@@ -27,7 +34,8 @@ import BaseButton from '@/components/common/BaseButton.vue';
           Explore our platform and discover amazing features tailored for you.
         </p>
         <div class="mt-6">
-          <BaseButton label="Get Started" variant="primary" class="mx-auto" @click="$router.push('/auth/register')" />
+          <BaseButton v-if="!authStore.isAuthenticated" type="button" label="Get Started" variant="primary" class="mx-auto" @click="$router.push('/auth/register')" />
+          <BaseButton v-else type="button" label="Dashboard" variant="primary" class="mx-auto" @click="$router.push('/dashboard')" />
         </div>
       </section>
 
