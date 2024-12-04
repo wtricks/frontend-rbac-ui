@@ -11,6 +11,7 @@ RBAC Admin is a role-based user management system built as an assignment to demo
 - **User Management**: Admin can create, edit, delete users, activate/deactivate user accounts, and manage user profiles.
 - **Activity Tracking**: Track and manage user activities.
 - **Admin Dashboard**: Provides an overview of system management with the ability to view users, roles, and other settings.
+- **Light/Dark Support**: User can toggle between light and dark theme using header button.
 
 ## Setup Instructions
 
