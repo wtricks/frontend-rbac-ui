@@ -28,3 +28,14 @@ export interface ButtonProps {
   fullWidth?: boolean
   disabled?: boolean
 }
+
+/**
+ * Table fetch data
+ */
+export interface TableFetchData {
+  query: string
+  page: number
+  perPage: number
+  sortBy: string | null
+  sortDirection: 'asc' | 'desc' | null
+}

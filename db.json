@@ -1,0 +1,31 @@
+{
+  "roles": [
+    {
+      "id": "1",
+      "name": "Admin",
+      "description": "Administrator with full access to all features and settings. added line",
+      "slug": "admin",
+      "createdAt": "2024-11-01T10:00:00Z",
+      "createdBy": "System",
+      "updatedAt": "2024-12-04T10:54:33.427Z"
+    },
+    {
+      "id": "2",
+      "name": "Editor",
+      "description": "Can edit content but has limited access to settings.",
+      "slug": "editor",
+      "createdAt": "2024-11-05T12:30:00Z",
+      "createdBy": "Admin",
+      "updatedAt": "2024-11-20T14:00:00Z"
+    },
+    {
+      "id": "5",
+      "name": "Moderator",
+      "description": "Responsible for monitoring and managing user-generated content.",
+      "slug": "moderator",
+      "createdAt": "2024-11-14T10:00:00Z",
+      "createdBy": "Admin",
+      "updatedAt": "2024-11-19T11:30:00Z"
+    }
+  ]
+}

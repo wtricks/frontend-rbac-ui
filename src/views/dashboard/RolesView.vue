@@ -9,6 +9,7 @@ import DashboardLayout from "@/components/layout/dashboard/DashboardLayout.vue";
 import useRolesStore from "@/stores/useRolesStore";
 import BaseTable from "@/components/common/BaseTable.vue";
 import type { Role } from "@/services/rolesServices";
+import type { TableFetchData } from "@/components/common/types";
 
 const rolesStore = useRolesStore();
 const toast = useToast();
@@ -19,11 +20,12 @@ const roleData = ref({
   slug: "",
 });
 
-const currentEditRoleId = ref<string | null>(null);
+const pagination = ref({
+  total: 0,
+  currPage: 1,
+})
 
-onMounted(() => {
-  rolesStore.loadRoles({ page: 1, pageSize: 10 });
-});
+const currentEditRoleId = ref<string | null>(null);
 
 const saveRole = async () => {
   if (!roleData.value.name || !roleData.value.description || !roleData.value.slug) {
@@ -50,6 +52,7 @@ const deleteRole = async (role: Role) => {
     return
   }
 
+  currentEditRoleId.value = ''
   rolesStore.removeRole(role.id).then(() => {
     toast.success("Role deleted successfully");
   })
@@ -63,6 +66,22 @@ const updateRole = (role: Role) => {
     slug: role.slug,
   };
 };
+
+const fetchRoles = (params: TableFetchData) => {
+  pagination.value = {
+    total: 10, // We need a valeu to know total pages
+    currPage: params.page
+  }
+
+  rolesStore.loadRoles({
+    page: pagination.value.currPage,
+    pageSize: 10,
+    // @ts-expect-error TODO: fix this
+    sortBy: params.sortBy || "name",
+    sortDirection: params.sortDirection || "desc",
+    search: params.query
+  });
+}
 
 // show and hide error
 watch(() => rolesStore.error, (error) => {
@@ -91,11 +110,11 @@ watch(() => rolesStore.error, (error) => {
       </form>
 
       <BaseTable :headers="[
-        { key: 'name', label: 'Name' },
+        { key: 'name', label: 'Name', sortable: true },
         { key: 'description', label: 'Description' },
         { key: 'slug', label: 'Slug' },
         { key: 'action', label: 'Action' },
-      ]" title="Roles List" class="col-span-3" :items="rolesStore.roles">
+      ]" title="Roles List" class="col-span-3" searchable :items="rolesStore.roles" @fetch="fetchRoles" :pagination="pagination" :is-loading="rolesStore.isLoading">
         <template #header-action="{ item }">
           <div class="flex items-center gap-2">
             <BaseButton :icon="ByEdit" variant="tertiary" class="!px-2" @click="updateRole(item)" />

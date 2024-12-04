@@ -32,8 +32,20 @@
             @click="header.sortable && onSort(header.key)">
             <div class="flex items-center gap-2">
               <span>{{ header.label }}</span>
-              <ClArrowDownSm v-if="header.sortable" class="w-4 h-4 transition-transform duration-200"
-                :class="{ 'rotate-180': sortBy === header.key }" />
+              <div v-if="header.sortable"
+                class="w-4 h-4 mt-1 ml-auto transition-transform duration-200 text-xs flex flex-col gap-1 items-center text-gray-500 dark:text-gray-400"
+                style="line-height: 0.5; font-size: 8px;">
+                <span class="transition-colors" :class="{
+                  'text-primary-500': sortBy === header.key && sortDirection === 'asc'
+                }">
+                  ▲
+                </span>
+                <span class="transition-colors" :class="{
+                  'text-primary-500': sortBy === header.key && sortDirection === 'desc'
+                }">
+                  ▼
+                </span>
+              </div>
             </div>
           </th>
         </tr>
@@ -66,7 +78,6 @@
 <script setup lang="ts" generic="T extends Record<string, any>">
 import { ref, onBeforeMount } from 'vue'
 import { useDebounceFn } from '@vueuse/core'
-import { ClArrowDownSm } from '@kalimahapps/vue-icons'
 import BaseButton from '@/components/common/BaseButton.vue'
 import BaseInput from '@/components/common/BaseInput.vue'
 
@@ -91,50 +102,51 @@ const props = defineProps<{
 }>()
 
 const emit = defineEmits<{
-  (e: 'fetch', { query, page, perPage, sortBy }: { query: string; page: number; perPage: number; sortBy: string }): void
+  (e: 'fetch', { query, page, perPage, sortBy, sortDirection }: { query: string; page: number; perPage: number; sortBy: string | null, sortDirection: 'asc' | 'desc' | null }): void
   (e: 'change-limit', perPage: number): void
 }>()
 
-const searchQuery = ref('')
-const sortBy = ref('')
 const perPage = ref(10)
+const searchQuery = ref('')
+const sortBy = ref<string | null>(null);
+const sortDirection = ref<'asc' | 'desc' | null>(null);
 
-const onSearch = useDebounceFn(() => {
+const fetchData = (params?: Record<string, unknown>) => {
   emit('fetch', {
     query: searchQuery.value,
     page: props.pagination?.currPage || 1,
     perPage: perPage.value,
     sortBy: sortBy.value,
+    sortDirection: sortDirection.value,
+    ...(params || {}),
   })
-}, 300)
+}
+
+const onSearch = useDebounceFn(fetchData, 300)
 
 const onSort = (key: string) => {
-  sortBy.value = sortBy.value === key ? '' : key
-  emit('fetch', {
-    query: searchQuery.value,
-    page: props.pagination?.currPage || 1,
-    perPage: perPage.value,
-    sortBy: sortBy.value,
-  })
+  if (sortBy.value === key) {
+    if (sortDirection.value === 'asc') {
+      sortDirection.value = 'desc';
+    } else if (sortDirection.value === 'desc') {
+      sortBy.value = null;
+      sortDirection.value = null;
+    } else {
+      sortDirection.value = 'asc';
+    }
+  } else {
+    sortBy.value = key;
+    sortDirection.value = 'asc';
+  }
+
+  fetchData()
 }
 
 const changePage = (page: number) => {
   if (props.pagination) {
-    emit('fetch', {
-      query: searchQuery.value,
-      page,
-      perPage: perPage.value,
-      sortBy: sortBy.value,
-    })
+    fetchData({ page })
   }
 }
 
-onBeforeMount(() => {
-  emit('fetch', {
-    query: searchQuery.value,
-    page: props.pagination?.currPage || 1,
-    perPage: perPage.value,
-    sortBy: sortBy.value,
-  })
-})
+onBeforeMount(fetchData)
 </script>

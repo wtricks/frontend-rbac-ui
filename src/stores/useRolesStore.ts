@@ -77,7 +77,6 @@ const useRolesStore = defineStore("roles", () => {
 
   const totalRoles = computed(() => roles.value.length);
   const isLoading = computed(() => loading.value);
-  const hasError = computed(() => error.value !== null);
 
   const resetError = () => {
     error.value = null;
@@ -90,7 +89,6 @@ const useRolesStore = defineStore("roles", () => {
     error,
     totalRoles,
     isLoading,
-    hasError,
     loadRoles,
     loadRoleById,
     addRole,
