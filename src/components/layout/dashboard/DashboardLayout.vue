@@ -50,7 +50,7 @@
               <ul
                 v-if="showProfileMenu"
                 ref="menuRef"
-                class="absolute top-10 right-0 w-32 bg-white rounded shadow overflow-hidden bg-white dark:bg-gray-800"
+                class="absolute z-10 top-10 right-0 w-32 bg-white rounded shadow overflow-hidden bg-white dark:bg-gray-800"
               >
                 <li
                   @click="$router.push({ name: 'profile' })"

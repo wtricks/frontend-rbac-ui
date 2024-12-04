@@ -16,7 +16,8 @@
       <div v-if="searchable" class="flex items-center gap-4 ml-auto mt-2 md:mt-0 w-full md:w-auto">
         <BaseInput v-model="searchQuery" type="search" placeholder="Search..." class="md:max-w-64" name="search"
           variant="secondary" @input="onSearch" />
-        <BaseInput v-if="perPageLimit" v-model="perPage" type="select" name="perPage" variant="secondary" class="max-w-20">
+        <BaseInput v-if="perPageLimit" v-model="perPage" type="select" name="perPage" variant="secondary"
+          class="max-w-20">
           <template #options>
             <option v-for="limit in perPageLimit" :key="limit" :value="limit">{{ limit }}</option>
           </template>
@@ -38,12 +39,13 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(item, index) in items" :key="item.id || index"
+        <tr v-for="(item, index) in items" :key="(item.id || index) as string"
           class="border-b last:border-0 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-700">
           <td v-for="header in headers" :key="header.key" class="py-2 px-4 text-gray-800 dark:text-gray-300">
-            <slot name="item" :item="item[header.key]" :header="header.key">
-              {{ item[header.key] }}
-            </slot>
+            <template v-if="$slots[`header-${header.key}`]">
+              <slot :name="`header-${header.key}`" :item="item" :header="header.key"></slot>
+            </template>
+            <spam>{{ item[header.key] }}</spam>
           </td>
         </tr>
       </tbody>
@@ -61,16 +63,23 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup lang="ts" generic="T extends Record<string, any>">
 import { ref, onBeforeMount } from 'vue'
 import { useDebounceFn } from '@vueuse/core'
 import { ClArrowDownSm } from '@kalimahapps/vue-icons'
 import BaseButton from '@/components/common/BaseButton.vue'
 import BaseInput from '@/components/common/BaseInput.vue'
 
+defineSlots<{
+  [key: string]: {
+    item: T
+    header: string
+  }
+}>();
+
 const props = defineProps<{
   headers: { label: string; key: string; sortable?: boolean }[]
-  items?: Record<string, string>[]
+  items?: T[]
   title?: string
   searchable?: boolean
   isLoading?: boolean
