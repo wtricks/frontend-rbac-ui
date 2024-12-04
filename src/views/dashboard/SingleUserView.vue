@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onBeforeMount, ref, watch } from 'vue';
+import { computed, onBeforeMount, ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useToast } from 'vue-toastification';
 import useAuthStore from '@/stores/useAuthStore';
@@ -9,9 +9,11 @@ import BaseButton from '@/components/common/BaseButton.vue';
 import BaseInput from '@/components/common/BaseInput.vue';
 import useUsersStore from '@/stores/useUsersStore';
 import SecureInput from '@/components/common/SecureInput.vue';
+import useRolesStore from '@/stores/useRolesStore';
 
 const authStore = useAuthStore();
 const usersStore = useUsersStore();
+const rolesStore = useRolesStore()
 const router = useRouter();
 const toast = useToast();
 const route = useRoute();
@@ -26,6 +28,8 @@ const userForm = ref<Partial<User>>({
   emailVerified: false,
   role: '',
 });
+
+const roles = ref<{name: string, id: string}[]>([]);
 
 const handleSubmit = () => {
   if (!userForm.value.name || !userForm.value.email || !userForm.value.avatar) {
@@ -85,7 +89,17 @@ const fetchUserInfo = () => {
   }
 }
 
-onBeforeMount(fetchUserInfo)
+const selectedRoleName = computed(() => {
+  const role = roles.value.find((r) => r.id == userForm.value.role)
+  return role?.name
+})
+
+onBeforeMount(() => {
+  fetchUserInfo()
+  rolesStore.getAllRoles().then((r) => {
+    roles.value = r
+  })
+})
 
 watch(() => route.params.id, fetchUserInfo)
 </script>
@@ -114,7 +128,9 @@ watch(() => route.params.id, fetchUserInfo)
             </template>
           </BaseInput>
           <BaseInput v-model="userForm.role" type="select" label="Role" name="role">
-            <template #options></template>
+            <template #options>
+              <option v-for="role in roles" :key="role.id" :value="role.id">{{ role.name }}</option>
+            </template>
           </BaseInput>
 
           <BaseButton type="submit" :label="userForm.id ? 'Update User' : 'Create User'" variant="primary" class="!px-6" />
@@ -144,7 +160,7 @@ watch(() => route.params.id, fetchUserInfo)
             </span>
           </p>
           <p class="text-sm text-gray-500 mt-2">
-            <b>Role</b>: {{ userForm.role || 'User' }}
+            <b>Role</b>: {{ selectedRoleName || 'User' }}
           </p>
         </div>
       </div>

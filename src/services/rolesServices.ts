@@ -49,6 +49,16 @@ export const fetchRoles = async (params: QueryRole): Promise<{ data: Role[]; tot
 };
 
 /**
+ * Fetches all roles
+ *
+ * @returns {Promise<Role[]>} A promise that resolves with an array of all roles
+ */
+export const getAllRoles = async (): Promise<Role[]> => {
+  const response = await apiClient.get("/roles");
+  return response.data;
+}
+
+/**
  * Fetches a single role by ID
  *
  * @param {string} id - The ID of the role

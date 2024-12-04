@@ -7,6 +7,7 @@ import {
   updateRole,
   deleteRole,
   existsRoleBySlug,
+  getAllRoles as getRoles,
   type Role,
   type QueryRole,
 } from "@/services/rolesServices";
@@ -91,6 +92,14 @@ const useRolesStore = defineStore("roles", () => {
     }
   }
 
+  const getAllRoles = async () => {
+    try {
+      return (await getRoles()).map((role: Role) => ({ name: role.name, id: role.id}));
+    } catch (err) {
+      throw error.value = (err as Error).message || `Failed to get all roles`;
+    }
+  }
+
   const totalRoles = computed(() => roles.value.length);
   const isLoading = computed(() => loading.value);
 
@@ -112,6 +121,7 @@ const useRolesStore = defineStore("roles", () => {
     removeRole,
     resetError,
     roleExists,
+    getAllRoles,
     pagination
   };
 });
