@@ -72,6 +72,11 @@
           "name": "Edit activity logs",
           "description": "Edit activity logs",
           "slug": "edit:activity-logs"
+        },
+        {
+          "name": "View dashboard",
+          "description": "View dashboard",
+          "slug": "view:dashboard"
         }
       ],
       "updatedAt": "2024-12-04T15:50:17.913Z"
@@ -103,6 +108,11 @@
           "name": "Create Users",
           "description": "Create new users",
           "slug": "create:users"
+        }, 
+        {
+          "name": "View dashboard",
+          "description": "View dashboard",
+          "slug": "view:dashboard"
         }
       ],
       "updatedAt": "2024-12-04T15:50:17.913Z"
@@ -119,6 +129,11 @@
           "name": "Views Users",
           "description": "View all users",
           "slug": "view:users"
+        },
+        {
+          "name": "View dashboard",
+          "description": "View dashboard",
+          "slug": "view:dashboard"
         }
       ],
       "updatedAt": "2024-12-04T15:50:17.913Z"
