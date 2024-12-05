@@ -18,7 +18,7 @@ const authStore = useAuthStore();
             <BaseButton label="Login" variant="secondary" />
           </RouterLink>
 
-          <RouterLink v-else asChild to="/auth/register" class="text-slate-800 dark:text-slate-200 hover:underline">
+          <RouterLink v-else asChild to="/dashboard" class="text-slate-800 dark:text-slate-200 hover:underline">
             <BaseButton label="Dashboard" variant="primary" />
           </RouterLink>
         </div>
