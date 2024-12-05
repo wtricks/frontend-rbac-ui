@@ -9,7 +9,7 @@ import {
   resetPassword,
   verifyEmail,
 } from "@/services/authServices";
-import { fetchRoleById } from "@/services/rolesServices";
+import { fetchRoleById, fetchRoleBySlug } from "@/services/rolesServices";
 
 const useAuthStore = defineStore("auth", () => {
   const isAuthenticated = ref(false);
@@ -111,13 +111,22 @@ const useAuthStore = defineStore("auth", () => {
     }
   };
 
-  const getPermissions = async () => {
+  const getPermissions = () => {
     if (user.value && user.value.role && permissions.value.length === 0) {
-      await fetchRoleById(user.value.role).then((role) => {
+      fetchRoleById(user.value.role).then((role) => {
         if (role) {
           permissions.value = role.permissions.map((permission) => permission.slug);
         }
       })
+
+      // If the user doesn't have a role, fetch the role by slug
+      if (permissions.value.length === 0) {
+        fetchRoleBySlug(user.value.role).then((role) => {
+          if (role) {
+            permissions.value = role.permissions.map((permission) => permission.slug);
+          }
+        })
+      }
 
       return permissions.value
     }

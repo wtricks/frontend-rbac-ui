@@ -70,6 +70,17 @@ export const fetchRoleById = async (id: string): Promise<Role> => {
 };
 
 /**
+ * Fetches a single role by slug
+ *
+ * @param {string} slug - The slug of the role to fetch
+ * @returns {Promise<Role>} A promise that resolves with the role
+ */
+export const fetchRoleBySlug = async (slug: string): Promise<Role> => {
+  const response = await apiClient.get(`/roles?slug=${slug}`);
+  return response.data[0];
+}
+
+/**
  * Creates a new role
  *
  * @param {Omit<Role, "id" | "createdAt" | "updatedAt">} role - Role data to create
