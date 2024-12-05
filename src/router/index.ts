@@ -23,6 +23,11 @@ router.beforeEach((to, from, next) => {
     document.title = meta.title as string
   }
 
+  // Redirect to login if not authenticated
+  if (meta.authRequired && !localStorage.getItem('__accessToken__')) {
+    return next({ name: 'login' })
+  }
+
   next()
 })
 

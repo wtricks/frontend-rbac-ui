@@ -32,6 +32,7 @@
             variant="tertiary"
             class="!px-2 mr-2"
             @click="$router.push({ name: 'activity' })"
+            v-if="matchArray(authStore.permissions, 'view:activity_log')"
           />
           <div class="relative">
             <BaseButton
@@ -96,6 +97,7 @@ import {
 import SidebarLayout from './SidebarLayout.vue'
 import BaseButton from '@/components/common/BaseButton.vue'
 import useAuthStore from '@/stores/useAuthStore'
+import { matchArray } from '@/utils/helper'
 
 defineProps<{ title: string }>()
 

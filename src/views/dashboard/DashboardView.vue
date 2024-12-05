@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import DashboardLayout from '@/components/layout/dashboard/DashboardLayout.vue'
 import BaseTable from '@/components/common/BaseTable.vue'
+import useAuthStore from '@/stores/useAuthStore';
+
+const authStore = useAuthStore()
 
 // TODO: fetch data, maybe from api
 // We can use JSON server for this, but for now we'll use a simple array
