@@ -147,10 +147,10 @@
       "password": "123456",
       "avatar": "",
       "rememberMe": true,
-      "isActive": true,
+      "isActive": false,
       "role": "user",
       "createdAt": "2024-12-04T17:28:00.312Z",
-      "updatedAt": "2024-12-05T05:17:43.356Z",
+      "updatedAt": "2024-12-05T05:43:02.449Z",
       "emailVerified": true
     },
     {

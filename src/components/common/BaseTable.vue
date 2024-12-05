@@ -57,7 +57,7 @@
             <template v-if="$slots[`header-${header.key}`]">
               <slot :name="`header-${header.key}`" :item="item" :header="header.key"></slot>
             </template>
-            <span>{{ item[header.key] }}</span>
+            <span v-else>{{ item[header.key] }}</span>
           </td>
         </tr>
       </tbody>
