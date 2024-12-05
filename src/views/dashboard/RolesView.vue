@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watch } from "vue";
+import { computed, ref, watch } from "vue";
 import { useToast } from "vue-toastification";
 import { BsTrash, ByEdit } from "@kalimahapps/vue-icons";
 
@@ -9,7 +9,10 @@ import useRolesStore from "@/stores/useRolesStore";
 import BaseTable from "@/components/common/BaseTable.vue";
 import type { Role } from "@/services/rolesServices";
 import type { TableFetchData } from "@/components/common/types";
+import useAuthStore from "@/stores/useAuthStore";
+import { matchArray } from "@/utils/helper";
 
+const authStore = useAuthStore()
 const rolesStore = useRolesStore();
 const toast = useToast();
 
@@ -37,6 +40,9 @@ const fetchRoles = (params: TableFetchData) => {
   });
 }
 
+const canDeleteRoles = computed(() => matchArray(authStore.permissions, 'delete:roles'))
+const canEditRoles = computed(() => matchArray(authStore.permissions, 'edit:roles'))
+
 // show and hide error
 watch(() => rolesStore.error, (error) => {
   if (error) {
@@ -47,7 +53,8 @@ watch(() => rolesStore.error, (error) => {
 </script>
 
 <template>
-  <DashboardLayout title="User Roles">
+  <DashboardLayout title="User Roles"
+    :permissions="['view:roles', 'create:roles', 'edit:roles', 'delete:roles', 'view:permissions', 'edit:permissions', 'delete:permissions', 'create:permissions']">
     <BaseTable :headers="[
       { key: 'name', label: 'Name', sortable: true },
       { key: 'description', label: 'Description' },
@@ -57,8 +64,10 @@ watch(() => rolesStore.error, (error) => {
       :pagination="rolesStore.pagination" :is-loading="rolesStore.isLoading">
       <template #header-action="{ item }">
         <div class="flex items-center gap-2">
-          <BaseButton type="button" :icon="ByEdit" variant="tertiary" class="!px-2" @click="$router.push({ name: 'edit-role', params: { id: (item as Role).id }})" />
-          <BaseButton type="button" :icon="BsTrash" variant="tertiary" class="!px-2 text-red-500" @click="deleteRole(item)" />
+          <BaseButton v-if="canEditRoles" type="button" :icon="ByEdit" variant="tertiary" class="!px-2"
+            @click="$router.push({ name: 'edit-role', params: { id: (item as Role).id } })" />
+          <BaseButton v-if="canDeleteRoles" type="button" :icon="BsTrash" variant="tertiary" class="!px-2 text-red-500"
+            @click="deleteRole(item)" />
         </div>
       </template>
     </BaseTable>

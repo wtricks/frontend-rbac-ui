@@ -35,7 +35,7 @@ const fetchData = async () => {
 </script>
 
 <template>
-  <DashboardLayout title="Activity">
+  <DashboardLayout title="Activity" :permissions="'view:activity-logs'">
     <BaseTable
       :headers="[
         { key: 'user', label: 'User', sortable: true },

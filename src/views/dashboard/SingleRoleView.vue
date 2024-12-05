@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted } from "vue";
+import { ref, onMounted, computed } from "vue";
 import { useRoute } from "vue-router";
 import { useToast } from "vue-toastification";
 import { BsTrash, ByEdit } from "@kalimahapps/vue-icons";
@@ -8,9 +8,10 @@ import BaseInput from "@/components/common/BaseInput.vue";
 import BaseButton from "@/components/common/BaseButton.vue";
 import DashboardLayout from "@/components/layout/dashboard/DashboardLayout.vue";
 import useRolesStore from "@/stores/useRolesStore";
-import type { Permission } from "@/services/rolesServices";
+import { type Permission } from "@/services/rolesServices";
 import BaseTable from "@/components/common/BaseTable.vue";
 import useAuthStore from "@/stores/useAuthStore";
+import { matchArray } from "@/utils/helper";
 
 const authStore = useAuthStore();
 const rolesStore = useRolesStore();
@@ -32,6 +33,18 @@ const permissionData = ref({
 
 const currentEditRoleId = ref<string | null>(route.params.id as string);
 const currentEditPermissionIndex = ref<number>(-1);
+const permissionNeeded = ['view:permissions', 'edit:permissions', 'delete:permissions', 'create:permissions']
+
+const permissions = computed(() => {
+  return {
+    updatePermission: matchArray(authStore.permissions, 'edit:permissions'),
+    deletePermission: matchArray(authStore.permissions, 'delete:permissions'),
+    updateRole: matchArray(authStore.permissions, 'edit:roles'),
+    createPermission: matchArray(authStore.permissions, 'create:permissions'),
+    createRole: matchArray(authStore.permissions, 'create:roles'),
+    viewPermissions: matchArray(authStore.permissions, 'view:permissions'),
+  }
+})
 
 onMounted(async () => {
   const roleId = route.params.id;
@@ -96,10 +109,10 @@ const saveRole = async () => {
 </script>
 
 <template>
-  <DashboardLayout :title="currentEditRoleId ? 'Edit Role' : 'Add Role'">
+  <DashboardLayout :title="currentEditRoleId ? 'Edit Role' : 'Add Role'" :permissions="[...permissionNeeded, currentEditRoleId ? 'edit:roles' : 'create:roles']">
     <form class="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-md space-y-6 w-full" @submit.prevent="saveRole">
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div class="space-y-4">
+        <div class="space-y-4" v-if="permissions.updateRole || permissions.createRole">
           <BaseInput variant="secondary" v-model="roleData.name" name="title" type="text" label="Role Title"
             placeholder="Enter role title" required />
           <BaseInput variant="secondary" v-model="roleData.description" name="description" type="textarea"
@@ -108,7 +121,7 @@ const saveRole = async () => {
             placeholder="Enter slug (alphabets only)" pattern="[A-Za-z]+" required />
         </div>
 
-        <div class="space-y-4">
+        <div class="space-y-4" v-if="permissions.updatePermission || permissions.createPermission">
           <BaseInput variant="secondary" v-model="permissionData.name" name="title" type="text" label="Permission Title"
             placeholder="Enter permission title" required />
           <BaseInput variant="secondary" v-model="permissionData.description" name="description" type="textarea"
@@ -124,12 +137,13 @@ const saveRole = async () => {
       </div>
 
       <BaseTable
+        v-if="permissions.deletePermission || permissions.updateRole || permissions.viewPermissions"
         :headers="[{ key: 'name', label: 'Name' }, { key: 'description', label: 'Description' }, { key: 'slug', label: 'Slug' }, { key: 'action', label: 'Action' }]"
         :items="roleData.permissions" title="Existing Permissions">
         <template #header-action="{ item }">
           <div class="flex items-center gap-2">
-            <BaseButton type="button" :icon="ByEdit" variant="tertiary" class="!px-2" @click="updatePermission(item)" />
-            <BaseButton type="button" :icon="BsTrash" variant="tertiary" class="!px-2 text-red-500" @click="removePermission(item)" />
+            <BaseButton v-if="permissions.updateRole" type="button" :icon="ByEdit" variant="tertiary" class="!px-2" @click="updatePermission(item)" />
+            <BaseButton v-if="permissions.deletePermission" type="button" :icon="BsTrash" variant="tertiary" class="!px-2 text-red-500" @click="removePermission(item)" />
           </div>
         </template>
       </BaseTable>

@@ -9,10 +9,19 @@ import useUsersStore from '@/stores/useUsersStore';
 import type { User } from '@/services/authServices';
 import type { TableFetchData } from '@/components/common/types';
 import useAuthStore from '@/stores/useAuthStore';
+import { computed } from 'vue';
+import { matchArray } from '@/utils/helper';
 
 const authStore = useAuthStore()
 const usersStore = useUsersStore()
 const toast = useToast()
+
+const permissions = computed(() => {
+  return {
+    canDeleteUser: matchArray(authStore.permissions, 'delete:users'),
+    canEditUser: matchArray(authStore.permissions, 'edit:users'),
+  }
+})
 
 const fetchUser = (params: TableFetchData) => {
   usersStore.fetchAllUsers({
@@ -41,7 +50,7 @@ const deleteUser = (user: User) => {
 </script>
 
 <template>
-  <DashboardLayout title="Users">
+  <DashboardLayout title="Users" :permissions="['view:users', 'delete:users', 'edit:users']">
     <BaseTable
       :headers="[
         { key: 'name', label: 'Name' },
@@ -60,8 +69,8 @@ const deleteUser = (user: User) => {
     >
       <template #header-action="{ item }">
         <div class="flex items-center gap-2">
-          <BaseButton type="button" :icon="ByEdit" variant="tertiary" class="!px-2" @click="$router.push({ name: 'edit-user', params: { id: (item as User).id }})" />
-          <BaseButton type="button" :icon="BsTrash" variant="tertiary" class="!px-2 text-red-500" @click="deleteUser(item as User)" />
+          <BaseButton v-if="permissions.canEditUser" type="button" :icon="ByEdit" variant="tertiary" class="!px-2" @click="$router.push({ name: 'edit-user', params: { id: (item as User).id }})" />
+          <BaseButton v-if="permissions.canDeleteUser" type="button" :icon="BsTrash" variant="tertiary" class="!px-2 text-red-500" @click="deleteUser(item as User)" />
         </div>
       </template>
     </BaseTable>

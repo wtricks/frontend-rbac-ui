@@ -48,7 +48,7 @@ watch(() => props.isCollapsed, debouncedRequest)
 
 const menuItems = ref<T[]>([])
 
-watch(() => authStore.permissions, (v) => {
+watch(() => authStore.permissions.length, (v) => {
   if (v) {
     menuItems.value = [
       {
@@ -84,5 +84,5 @@ watch(() => authStore.permissions, (v) => {
       },
     ]
   }
-})
+}, { immediate: true })
 </script>

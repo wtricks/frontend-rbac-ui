@@ -2,6 +2,7 @@
 import DashboardLayout from '@/components/layout/dashboard/DashboardLayout.vue'
 import BaseTable from '@/components/common/BaseTable.vue'
 import useAuthStore from '@/stores/useAuthStore';
+import { matchArray } from '@/utils/helper';
 
 const authStore = useAuthStore()
 
@@ -27,7 +28,7 @@ const activities = [
 </script>
 
 <template>
-  <DashboardLayout title="Dashboard">
+  <DashboardLayout title="Dashboard" :permissions="['view:dashboard', 'view:activity-logs']">
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
       <div
         v-for="stat in stats"
@@ -43,6 +44,7 @@ const activities = [
     </div>
 
     <BaseTable
+      v-if="matchArray(authStore.permissions, 'view:activity-logs')"
       :headers="[
         { key: 'user', label: 'User' },
         { key: 'action', label: 'Action' },

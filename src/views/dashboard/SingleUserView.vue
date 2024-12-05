@@ -10,6 +10,7 @@ import BaseInput from '@/components/common/BaseInput.vue';
 import useUsersStore from '@/stores/useUsersStore';
 import SecureInput from '@/components/common/SecureInput.vue';
 import useRolesStore from '@/stores/useRolesStore';
+import { matchArray } from '@/utils/helper';
 
 const authStore = useAuthStore();
 const usersStore = useUsersStore();
@@ -29,10 +30,20 @@ const userForm = ref<Partial<User>>({
   role: '',
 });
 
-const roles = ref<{name: string, id: string}[]>([]);
+const roles = ref<{ name: string, id: string }[]>([]);
+const isProfilePage = computed(() => route.name == 'profile');
+const isEditUserPage = computed(() => route.params.id);
+
+const permissions = computed(() => {
+  return {
+    editUser: matchArray(authStore.permissions, 'edit:users'),
+    assignRoles: matchArray(authStore.permissions, 'assign:roles'),
+    createUser: matchArray(authStore.permissions, 'create:users'),
+  }
+})
 
 const handleSubmit = () => {
-  if (!userForm.value.name || !userForm.value.email || !userForm.value.avatar) {
+  if (!userForm.value.name || !userForm.value.email || (!isProfilePage.value && !userForm.value.password)) {
     toast.error('All fields are required');
     return;
   }
@@ -49,7 +60,7 @@ const handleSubmit = () => {
       return;
     }
 
-    usersStore.updateUserAccount(userId as string, userForm.value).then(() => {
+    usersStore.updateUserAccount(userId as string, { ...userForm.value, role: permissions.value.assignRoles ? userForm.value.role as string : 'user' }).then(() => {
       toast.success('User updated successfully');
       router.push({ name: 'users' });
     });
@@ -57,9 +68,9 @@ const handleSubmit = () => {
     usersStore.createUserAccount({
       name: userForm.value.name,
       email: userForm.value.email,
-      avatar: userForm.value.avatar,
+      avatar: userForm.value.avatar || '',
       password: userForm.value.password,
-      role: userForm.value.role as string,
+      role: permissions.value.assignRoles ? userForm.value.role as string : 'user',
       isActive: userForm.value.isActive as boolean,
       emailVerified: userForm.value.emailVerified as boolean,
       rememberMe: false
@@ -105,39 +116,51 @@ watch(() => route.params.id, fetchUserInfo)
 </script>
 
 <template>
-  <DashboardLayout :title="route.name == 'profile' ? 'Profile' : route.params.id ? 'Edit User' : 'Add User'">
+  <DashboardLayout :title="isProfilePage ? 'Profile' : route.params.id ? 'Edit User' : 'Add User'"
+    :permissions="isProfilePage ? undefined : isEditUserPage ? 'edit:users' : 'create:users'">
     <div class="grid grid-cols-1 md:grid-cols-2 gap-5 p-3">
       <div class="space-y-4 p-6 bg-white rounded shadow dark:bg-gray-800">
-        <h2 class="text-2xl font-bold dark:text-gray-300">{{ route.name == 'profile' ? 'Profile' : route.params.id ? 'Edit User' : 'Add User' }}</h2>
+        <h2 class="text-2xl font-bold dark:text-gray-300">{{ isProfilePage ? 'Profile' : route.params.id ? 'Edit User' :
+          'Add User' }}</h2>
 
         <form @submit.prevent="handleSubmit" class="space-y-4">
-          <BaseInput v-model="userForm.name" label="Name" type="text" name="name" placeholder="Enter your name" required />
-          <BaseInput v-model="userForm.email" label="Email" type="email" name="email" placeholder="Enter your email" required />
-          <SecureInput v-model="userForm.password" label="Password" name="password" placeholder="Enter your password" required />
-          <BaseInput v-model="userForm.avatar" label="Avatar URL" type="text" name="avatar" placeholder="Enter avatar URL" />
-          <BaseInput v-model="(userForm.emailVerified as any)" type="select" label="Email Verified" name="emailVerified">
+          <BaseInput v-model="userForm.name" label="Name" type="text" name="name" placeholder="Enter your name"
+            required />
+          <BaseInput v-model="userForm.email" label="Email" type="email" name="email" placeholder="Enter your email"
+            required />
+          <SecureInput v-model="userForm.password" v-if="!isProfilePage" label="Password" name="password"
+            placeholder="Enter your password" required />
+          <BaseInput v-model="userForm.avatar" label="Avatar URL" type="text" name="avatar"
+            placeholder="Enter avatar URL" />
+          <BaseInput v-model="(userForm.emailVerified as any)" type="select" label="Email Verified" name="emailVerified"
+            v-if="!isProfilePage">
             <template #options>
               <option :value="true">Yes</option>
               <option :value="false">No</option>
             </template>
           </BaseInput>
-          <BaseInput v-model="(userForm.isActive as any)" type="select" label="Status" name="emailVerified">
+          <BaseInput v-model="(userForm.isActive as any)" type="select" label="Status" name="emailVerified"
+            v-if="!isProfilePage">
             <template #options>
               <option :value="true">Active</option>
               <option :value="false">Inactive</option>
             </template>
           </BaseInput>
-          <BaseInput v-model="userForm.role" type="select" label="Role" name="role">
+          <BaseInput v-model="userForm.role" type="select" label="Role" name="role"
+            v-if="permissions.assignRoles && !isProfilePage">
             <template #options>
               <option v-for="role in roles" :key="role.id" :value="role.id">{{ role.name }}</option>
             </template>
           </BaseInput>
 
-          <BaseButton type="submit" :label="userForm.id ? 'Update User' : 'Create User'" variant="primary" class="!px-6" />
+          <BaseButton type="submit"
+            :label="isProfilePage ? 'Update Profile' : userForm.id ? 'Update User' : 'Create User'" variant="primary"
+            class="!px-6" />
         </form>
       </div>
 
-      <div class="flex flex-col items-center justify-center p-6 bg-gray-100 rounded space-y-4 bg-white dark:bg-gray-800 max-w-md">
+      <div
+        class="flex flex-col items-center justify-center p-6 bg-gray-100 rounded space-y-4 bg-white dark:bg-gray-800 max-w-md">
         <h3 class="text-xl font-semibold mb-4">User Preview</h3>
 
         <div class="w-32 h-32 rounded-full bg-gray-300 flex items-center justify-center mb-4">

@@ -39,6 +39,8 @@ const useAuthStore = defineStore("auth", () => {
   const logoutUser = () => {
     user.value = null;
     isAuthenticated.value = false;
+    error.value = null;
+    permissions.value = [];
 
     localStorage.removeItem("__accessToken__");
   };

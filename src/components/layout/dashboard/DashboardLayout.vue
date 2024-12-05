@@ -1,5 +1,9 @@
 <template>
-  <div class="flex h-screen bg-gray-100 dark:bg-gray-900">
+  <!--
+    For now, We'll hide the content if the user doesn't have access
+    But in real life, we can show something like a 404 page or a 403 page
+   -->
+  <div class="flex h-screen bg-gray-100 dark:bg-gray-900" v-if="hasAccess">
     <SidebarLayout :isCollapsed="isCollapsed" @update:isCollapsed="isCollapsed = $event" />
 
     <div class="flex-1 flex flex-col">
@@ -81,7 +85,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { BxLogOutCircle } from '@kalimahapps/vue-icons'
 import { onClickOutside, useEventListener } from '@vueuse/core'
@@ -97,9 +101,9 @@ import {
 import SidebarLayout from './SidebarLayout.vue'
 import BaseButton from '@/components/common/BaseButton.vue'
 import useAuthStore from '@/stores/useAuthStore'
-import { matchArray } from '@/utils/helper'
+import { anyMatch, matchArray } from '@/utils/helper'
 
-defineProps<{ title: string }>()
+const props = defineProps<{ title: string, permissions?: string[] | string }>()
 
 const isDark = useLocalStorage('_theme_', false)
 const isCollapsed = ref(window.innerWidth < 768)
@@ -108,6 +112,13 @@ const menuRef = ref<HTMLLIElement>()
 
 const authStore = useAuthStore()
 const router = useRouter()
+
+const hasAccess = computed(() => {
+  if (!props.permissions) return true;
+
+  const permissions = typeof props.permissions === 'string' ? [props.permissions] : props.permissions;
+  return anyMatch(authStore.permissions, permissions)
+})
 
 onClickOutside(menuRef, () => {
   showProfileMenu.value = false
