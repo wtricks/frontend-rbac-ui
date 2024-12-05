@@ -158,13 +158,13 @@
       "name": "User 2",
       "email": "user2@gmail.com",
       "avatar": "",
-      "password": "123456",
+      "password": "",
       "isActive": true,
-      "role": "2",
+      "role": "user",
       "emailVerified": true,
       "rememberMe": false,
       "createdAt": "2024-12-04T18:42:36.265Z",
-      "updatedAt": "2024-12-04T18:48:31.058Z"
+      "updatedAt": "2024-12-05T05:58:53.484Z"
     }
   ],
   "tokens": []

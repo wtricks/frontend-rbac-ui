@@ -18,6 +18,11 @@ const useAuthStore = defineStore("auth", () => {
   const error = ref<string | null>(null);
   const permissions = ref<string[]>([]);
 
+  const setUser = (newuser: User) => {
+    isAuthenticated.value = true;
+    user.value = newuser;
+  };
+
   const loginUser = async (email: string, password: string) => {
     loading.value = true;
     error.value = null;
@@ -159,7 +164,8 @@ const useAuthStore = defineStore("auth", () => {
     requestPasswordReset,
     resetUserPassword,
     verifyUserEmail,
-    getPermissions
+    getPermissions,
+    setUser
   };
 });
 

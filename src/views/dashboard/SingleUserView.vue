@@ -64,6 +64,15 @@ const handleSubmit = () => {
       toast.success('User updated successfully');
       router.push({ name: 'users' });
     });
+
+    if (isProfilePage.value) {
+      authStore.setUser({
+        ...authStore.user!,
+        name: userForm.value.name,
+        email: userForm.value.email,
+        avatar: userForm.value.avatar || '',
+      });
+    }
   } else {
     usersStore.createUserAccount({
       name: userForm.value.name,
